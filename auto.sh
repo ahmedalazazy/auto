@@ -54,7 +54,7 @@ case $PANAL in
 
     i | I | ISP | isp | ispconfig | ISPconfig )
     echo   "====================================================================================================================="
-    echo "\t\t\t\t Hello,$USER this is script to auto install ISPConfig and tools on centOS 7 \n\n\n\n"
+    echo   "\t\t\t\t Hello,$USER this is script to auto install ISPConfig and tools on centOS 7 \n\n\n\n"
     echo   "====================================================================================================================="
     yum update -y
     yum upgrade -y
