@@ -2,7 +2,7 @@
 echo   "====================================================================================================================="
 echo   "\t\t THis Script for automatic install cwp on CentOS and install virtualmin on Ubuntu and install ISPConfig on CentOS \n";
 echo   "====================================================================================================================="
-echo   "\t\t\t\t \t \tYou must make sure the hostname is correct before running\n";
+echo   "\t\t\t\t\t\t You must make sure the hostname is correct before running \n";
 echo   "====================================================================================================================="
 read -p "Enter c for CWP or v to virtualmin or i for ISPConfig :" PANAL ;
 
