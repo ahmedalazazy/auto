@@ -1,8 +1,8 @@
 # auto
 ****************************************************************************************
-This Script for Automate install cwp on CentOS , Virtualmin on Ubuntu , ISPConfig on CentOS $RESET
+This Script for Automate install cwp on CentOS , Virtualmin on Ubuntu , ISPConfig on CentOS 
 You must make sure the hostname is correct before running"
-Github: $GREEN ahmedalazazy"
+Github: ahmedalazazy"
 ***************************************************************************************
 to using  
 download auto.sh 
