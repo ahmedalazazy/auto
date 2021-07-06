@@ -15,11 +15,11 @@ echo " "
 # Check Root Privileges
 if [[ $EUID -ne 0 ]];
 then
-    echo
-    echo "                       Hi $USER"
-    echo
-    echo "          Type Your sudo password To using Script  "
-    echo
+    echo ""
+    echo -e "              $RED Hi $USER $RESET"
+    echo ""
+    echo -e "          $RED Type Your sudo password To using Script $RESET"
+    echo ""
     exec sudo /bin/bash "$0" "$@"
 fi
 
@@ -31,7 +31,7 @@ case $PANAL in
 
   C | c | CWP | centos )
     echo -e "$GREEN******************************************************************************$RESET"
-    echo   "\t\t\t\t Hello,$USER this is script to auto install CWP and tools on centOS 7 \n"
+    echo   "$RED \t\t\t\t Hello,$USER this is script to auto install CWP and tools on centOS 7 \n $RESET"
     echo -e "$GREEN******************************************************************************$RESET"
     yum update -y
     yum upgrade -y
