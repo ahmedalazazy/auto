@@ -5,11 +5,11 @@ RESET='\033[0m'
 GREEN='\033[01;32m'
 
 clear
-echo -e "$GREEN****************************************************************************************************$RESET"
+echo -e "$GREEN****************************************************************************************$RESET"
 echo -e "   This Script for Automate install cwp on CentOS , Virtualmin on Ubuntu , ISPConfig on CentOS $RESET"
 echo -e "                 You must make sure the hostname is correct before running"
 echo -e "                            Github: $GREEN ahmedalazazy"
-echo -e "$GREEN***************************************************************************************************$RESET"
+echo -e "$GREEN****************************************************************************************$RESET"
 echo " "
 echo " "
 # Check Root Privileges
@@ -75,7 +75,7 @@ case $PANAL in
 
     i | I | ISP | isp | ispconfig | ISPconfig )
     echo -e "$GREEN******************************************************************************$RESET"
-    echo   "$RED\t\t\t\t Hello,$USER this is script to auto install ISPConfig and tools on centOS 7  $RESET \n\n\n\n"
+    echo -e "$RED\t\t\t\t Hello,$USER this is script to auto install ISPConfig and tools on centOS 7  $RESET \n\n"
     echo -e "$GREEN******************************************************************************$RESET"
     yum update -y
     yum upgrade -y
