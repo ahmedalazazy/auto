@@ -12,6 +12,19 @@ echo -e "                            Github: $GREEN ahmedalazazy"
 echo -e "$GREEN***************************************************************************************************$RESET"
 echo " "
 echo " "
+# Check Root Privileges
+if [[ $EUID -ne 0 ]];
+then
+    echo
+    echo "                       Hi $USER"
+    echo
+    echo "          Type Your sudo password To using Script  "
+    echo
+    exec sudo /bin/bash "$0" "$@"
+fi
+
+echo " "
+
 read -p "Enter c for CWP or v to virtualmin or i for ISPConfig :" PANAL ;
 
 case $PANAL in
