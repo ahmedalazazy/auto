@@ -6,7 +6,7 @@ GREEN='\033[01;32m'
 
 clear
 echo -e "$GREEN******************************************************************************$RESET"
-echo -e "   THis Script for automatic install cwp on CentOS , irtualmin on Ubuntu , ISPConfig on CentOS $RESET"
+echo -e "   This Script for Automate install cwp on CentOS , Virtualmin on Ubuntu , ISPConfig on CentOS $RESET"
 echo -e "                 You must make sure the hostname is correct before running"
 echo -e "                            Github: ahmedalazazy"
 echo -e "$GREEN******************************************************************************$RESET"
@@ -17,9 +17,9 @@ read -p "Enter c for CWP or v to virtualmin or i for ISPConfig :" PANAL ;
 case $PANAL in
 
   C | c | CWP | centos )
-    echo   "====================================================================================================================="
+    echo -e "$GREEN******************************************************************************$RESET"
     echo   "\t\t\t\t Hello,$USER this is script to auto install CWP and tools on centOS 7 \n"
-    echo   "====================================================================================================================="
+    echo -e "$GREEN******************************************************************************$RESET"
     yum update -y
     yum upgrade -y
     echo 'alias whatismyip="dig @resolver4.opendns.com myip.opendns.com +short"' >> /root/.bashrc
@@ -61,9 +61,9 @@ case $PANAL in
     ;;
 
     i | I | ISP | isp | ispconfig | ISPconfig )
-    echo   "====================================================================================================================="
+    echo -e "$GREEN******************************************************************************$RESET"
     echo   "\t\t\t\t Hello,$USER this is script to auto install ISPConfig and tools on centOS 7 \n\n\n\n"
-    echo   "====================================================================================================================="
+    echo -e "$GREEN******************************************************************************$RESET"
     yum update -y
     yum upgrade -y
     echo 'alias whatismyip="dig @resolver4.opendns.com myip.opendns.com +short"' >> /root/.bashrc
@@ -124,9 +124,9 @@ case $PANAL in
     php -q install.php
     ;;
   v | V | ubuntu | Ubuntu | virtualmin )
-    echo   "====================================================================================================================="
+    echo -e "$GREEN**********************************************************************************$RESET"
     echo "\t\t\t\t Hello,$USER this is script to auto install Virtualmin and tools on Ubuntu \n\n\n\n"
-    echo   "====================================================================================================================="
+    echo -e "$GREEN***********************************************************************************$RESET"
     apt update -y
     apt upgrade -y
     echo 'alias whatismyip="dig @resolver4.opendns.com myip.opendns.com +short"' >> /root/.bashrc
@@ -170,6 +170,8 @@ case $PANAL in
     ;;
 
   *)
-    echo -n "unknown what you need to do "
+    echo -e "$GREEN******************************************************************************$RESET"
+    echo -n                 "unknown what you need to do "
+    echo -e "$GREEN******************************************************************************$RESET"
     ;;
 esac
