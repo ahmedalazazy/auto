@@ -16,9 +16,9 @@ echo " "
 if [[ $EUID -ne 0 ]];
 then
     echo ""
-    echo -e "              $RED Hi $USER $RESET"
+    echo -e "               $RED Hi $USER $RESET"
     echo ""
-    echo -e "          $RED Type Your sudo password To using Script $RESET"
+    echo -e "   $RED Type Your sudo password To using Script $RESET"
     echo ""
     exec sudo /bin/bash "$0" "$@"
 fi
@@ -75,7 +75,7 @@ case $PANAL in
 
     i | I | ISP | isp | ispconfig | ISPconfig )
     echo -e "$GREEN******************************************************************************$RESET"
-    echo   "\t\t\t\t Hello,$USER this is script to auto install ISPConfig and tools on centOS 7 \n\n\n\n"
+    echo   "$RED\t\t\t\t Hello,$USER this is script to auto install ISPConfig and tools on centOS 7  $RESET \n\n\n\n"
     echo -e "$GREEN******************************************************************************$RESET"
     yum update -y
     yum upgrade -y
@@ -138,7 +138,7 @@ case $PANAL in
     ;;
   v | V | ubuntu | Ubuntu | virtualmin )
     echo -e "$GREEN**********************************************************************************$RESET"
-    echo "\t\t\t\t Hello,$USER this is script to auto install Virtualmin and tools on Ubuntu \n\n\n\n"
+    echo    "$RED \t\t\t\t Hello,$USER this is script to auto install Virtualmin and tools on Ubuntu  $RESET \n\n\n\n"
     echo -e "$GREEN***********************************************************************************$RESET"
     apt update -y
     apt upgrade -y
@@ -184,7 +184,7 @@ case $PANAL in
 
   *)
     echo -e "$GREEN******************************************************************************$RESET"
-    echo -n                 "unknown what you need to do "
+    echo -n                 "$RED unknown what you need to do  $RESET"
     echo -e "$GREEN******************************************************************************$RESET"
     ;;
 esac
