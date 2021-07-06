@@ -16,9 +16,9 @@ echo " "
 if [[ $EUID -ne 0 ]];
 then
     echo ""
-    echo -e "                           $RED Hi $USER $RESET"
+    echo -e "                        \t   $RED Hi $USER $RESET"
     echo ""
-    echo -e "             $RED Type Your sudo password To using Script $RESET"
+    echo -e " \t            $RED Type Your sudo password To using Script $RESET"
     echo ""
     exec sudo /bin/bash "$0" "$@"
 fi
