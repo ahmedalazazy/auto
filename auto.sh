@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+RED='\033[01;31m'
+RESET='\033[0m'
+GREEN='\033[01;32m'
+
+clear
 echo -e "$GREEN******************************************************************************$RESET"
 echo -e "   THis Script for automatic install cwp on CentOS , irtualmin on Ubuntu , ISPConfig on CentOS $RESET"
 echo -e "                 You must make sure the hostname is correct before running"
