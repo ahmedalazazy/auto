@@ -12,4 +12,3 @@ iptables -A INPUT -m string --algo bm --string "$DOMAINNAME" -j DROP
 iptables -A FORWARD -m string --algo bm --string "$DOMAINNAME" -j DROP
 iptables -A OUTPUT -m string --algo bm --string "$DOMAINNAME" -j DROP
 /sbin/iptables-save > /etc/sysconfig/iptables
-/sbin/iptables-save
