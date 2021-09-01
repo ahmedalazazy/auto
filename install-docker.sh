@@ -1,4 +1,5 @@
 #!/bin/bash
+
 yum -y update && yum -y upgrade
 yum -y remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
 yum install -y yum-utils vim nano wget curl
