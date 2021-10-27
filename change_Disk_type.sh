@@ -7,6 +7,8 @@
 #4-detatch old disks and attach new disks
 #5-start vm 
 #6-rerun script to tack new vm name ro repet procec#
+#if you neeed this script asking you what if zone you need after and comment the below line 
+#read -p "Please type zone : " ZONE;
 ZONE="europe-west1-b"
 read -p "Please Enter INSTANS NAME :" INSTANCE_NAME;
 read -p "Please Enter USIDG INSTANS DISK NAME : " ORGDISK_NAME;
