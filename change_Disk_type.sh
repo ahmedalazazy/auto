@@ -23,8 +23,14 @@ DISKTYPES="";
 #
 DISK_NAME="$ORGDISK_NAME-snapshot";
 NEW_DISK="$ORGDISK_NAME-newType";
-gcloud compute instances stop $INSTANCE_NAME --zone "$ZONE";
-echo "vm in stoping process";
+VMSTATUS=$(gcloud compute instances list  --filter=name:"$INSTANCE_NAME" --format="value(status)");
+if [[ $VMSTATUS -eq "RUNNING" ]]; then
+	gcloud compute instances stop $INSTANCE_NAME --zone "$ZONE";
+	echo "vm in stoping process";
+else
+	echo "This virtual machine is already powered OFF"
+fi
+
 gcloud compute disks snapshot "$ORGDISK_NAME" --zone "$ZONE" --snapshot-names="$DISK_NAME";
 echo "tacke snapshot in process";
 #if you need to change disk type you can edit --type="name of disk type" or make it my var
