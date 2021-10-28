@@ -13,14 +13,22 @@ ZONE="europe-west1-b"
 read -p "Please Enter INSTANS NAME :" INSTANCE_NAME;
 read -p "Please Enter USIDG INSTANS DISK NAME : " ORGDISK_NAME;
 read -p "Please Enter USIDG Snapshoot SCHEDULE NAME to ad in new disk : " SCHEDULE_NAME;
+PROJECT_ID="";
+DISKTYPES="";
+#
+#pd-standard 
+#pd-balanced 
+#pd-ssd
+#
+#
 DISK_NAME="$ORGDISK_NAME-snapshot";
 NEW_DISK="$ORGDISK_NAME-newType";
 gcloud compute instances stop $INSTANCE_NAME --zone "$ZONE";
 echo "vm in stoping process";
-gcloud compute disks snapshot "$ORGDISK_NAME" --zone=us-central1-a --snapshot-names="$DISK_NAME";
+gcloud compute disks snapshot "$ORGDISK_NAME" --zone "$ZONE" --snapshot-names="$DISK_NAME";
 echo "tacke snapshot in process";
 #if you need to change disk type you can edit --type="name of disk type" or make it my var
-gcloud compute disks create "$NEW_DISK" --source-snapshot "$DISK_NAME" --type="pd-standard" --resource-policies "SCHEDULE_NAME"  --zone "$ZONE";
+gcloud compute disks create "$NEW_DISK" --source-snapshot "$DISK_NAME" --type="https://www.googleapis.com/compute/v1/projects/$PROJECT_ID/zones/$ZONE/diskTypes/$DISKTYPES" --resource-policies "SCHEDULE_NAME"  --zone "$ZONE";
 echo "new DISK in creating process";
 gcloud beta compute instances detach-disk "$INSTANCE_NAME" --disk "$ORGDISK_NAME" --zone "$ZONE";
 echo "detaching old disk in process"
