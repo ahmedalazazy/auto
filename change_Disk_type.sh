@@ -11,13 +11,15 @@
 #if you neeed this script asking you what if zone you need after and comment the below line 
 #############################################################################################################################
 
-read -p "Please type zone : " ZONE;
-ZONE="europe-west1-b"
+
+#ZONE="europe-west1-b"
 read -p "Please Enter INSTANS NAME :" INSTANCE_NAME;
 read -p "Please Enter USIDG INSTANS DISK NAME : " ORGDISK_NAME;
+read -p "Please type zone : " ZONE;
+read -p "Please type PROJECT_ID : " PROJECT_ID;
 read -p "Please Enter USIDG Snapshoot SCHEDULE NAME to ad in new disk : " SCHEDULE_NAME;
 #type project id you need script work in him
-PROJECT_ID="";
+#PROJECT_ID="";
 #Tyepe Desk value you need to change vm to 
 DISKTYPES="pd-standard";
 #DIsksType
