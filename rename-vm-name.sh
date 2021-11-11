@@ -1,4 +1,19 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+
+RED='\033[01;31m'
+RESET='\033[0m'
+GREEN='\033[01;32m'
+
+clear
+echo -e "$GREEN****************************************************************************************$RESET"
+echo -e "                            Github: $GREEN ahmedalazazy"
+echo -e "$GREEN****************************************************************************************$RESET"
+echo " "
+echo " "
+echo ""
+echo -e "                        \t   $RED Hi $USER $RESET"
+echo " "
+
 echo "Using this Script to rename Instans Name on GCP";
 echo "This process will stop INSTANS";
 read -p "Please Enter Instans Name" CURRENT_NAME;
