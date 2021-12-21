@@ -14,7 +14,7 @@ echo " "
 echo ""
 echo -e "                        \t   $RED Hi $USER $RESET"
 echo ""
-echo "4-Compute"
+echo "Compute"
 
 read -p "Please Type Project ID :" PROJECTT;
 read -p "please enter Lable Key for the lable assind to VM's not in Soaltanal : " KKEY;
