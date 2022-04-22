@@ -63,7 +63,7 @@ fi
 sleep 3
 
 
-if cat /etc/passwd/ |grep -q "apigee" ; then
+if cat /etc/passwd |grep -q "apigee" ; then
    echo "The apigee USER already created"
 else
 
