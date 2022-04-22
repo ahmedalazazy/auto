@@ -63,6 +63,11 @@ fi
 sleep 3
 
 
+if cat /etc/passwd/ |grep -q "apigee" ; then
+   echo "The apigee USER already created"
+else
+
+
 echo "1) CentOS"
 echo "2) Redhat OS"
 sleep 3
@@ -82,11 +87,13 @@ case $OSNAME in
     ;;
   *)
     echo -e "\t $RED please become a smart ENG $RESET "
-
+    echo -e " \t $RED APIGEE USER NOT CREATED PLEASE STOP SCRIP AND CREATE THE USER $RESET"
     ;;
 esac
 
-echo -e " \t $RED APIGEE USER NOT CREATED PLEASE STOP SCRIP AND CREATE THE USER $RESET"
+fi
+
+
 sleep 5
 
 curl https://software.apigee.com/bootstrap_4.18.05.sh -o /tmp/bootstrap_4.18.05.sh
