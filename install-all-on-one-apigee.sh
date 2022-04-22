@@ -63,33 +63,33 @@ fi
 sleep 3
 
 
-if cat /etc/passwd |grep -q "apigee" ; then
+if cat "/etc/passwd" | grep -q "apigee" ; then
    echo "The apigee USER already created"
 else
 
 
-echo "1) CentOS"
-echo "2) Redhat OS"
-sleep 3
+    echo "1) CentOS"
+    echo "2) Redhat OS"
+    sleep 2
 
-read -p "Please if type The os numbre : " OSNAME;
+    read -p "Please if type The os numbre : " OSNAME;
 
-case $OSNAME in
+    case $OSNAME in
 
-  1)
-    adduser -m -s /sbin/nologin -c 'Apigee platform user' apigee
-    echo "6- Create the apigee user and group: "
-    ;;
+      1)
+        adduser -m -s /sbin/nologin -c 'Apigee platform user' apigee
+        echo "6- Create the apigee user and group: "
+        ;;
 
-  2)
-    groupadd -r apigee > useradd -r -g apigee -d /opt/apigee -s /sbin/nologin -c 'Apigee platform user' apigee
-    echo "6- Create the apigee user and group: "
-    ;;
-  *)
-    echo -e "\t $RED please become a smart ENG $RESET "
-    echo -e " \t $RED APIGEE USER NOT CREATED PLEASE STOP SCRIP AND CREATE THE USER $RESET"
-    ;;
-esac
+      2)
+        groupadd -r apigee > useradd -r -g apigee -d /opt/apigee -s /sbin/nologin -c 'Apigee platform user' apigee
+        echo "6- Create the apigee user and group: "
+        ;;
+      *)
+        echo -e "\t $RED please become a smart ENG $RESET "
+        echo -e " \t $RED APIGEE USER NOT CREATED PLEASE STOP SCRIP AND CREATE THE USER $RESET"
+        ;;
+      esac
 
 fi
 
