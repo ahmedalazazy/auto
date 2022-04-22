@@ -11,7 +11,7 @@ echo -e "                            Github: $GREEN ahmedalazazy"
 echo -e "$GREEN****************************************************************************************$RESET"
 echo " "
 echo " "
-sleep 9
+
 # Check Root Privileges
 if [[ $EUID -ne 0 ]];
 then
@@ -28,7 +28,7 @@ echo " "
 read -p "Please type the apigeeuser proved py apige subscription : " UUUSSSESR;
 read -p "Please type the apigeepassword proved py apige subscription : " PASSSWORDDD;
 sudo setenforce 0
-echo "1-disable selinux "
+echo "1-setenforce 0 selinux done"
 sleep 5
 
 sudo yum update -y
@@ -40,6 +40,7 @@ yum install -y wget htop vim nano curl bash yum-utils yum-plugin-priorities net-
 echo "3- install needed tools and utilites "
 sleep 5
 
+
 if yum repolist enabled | grep -q "epel" ; then
    echo "package epel-release is already installed"
 else
@@ -50,6 +51,7 @@ fi
 
 sleep 5
 
+
 if rpm -qa | grep -q "libdb4" ; then
     echo "libdb4 uninstall it"
     sudo yum remove libdb4 -y
@@ -57,24 +59,34 @@ else
     echo "libdb4 not installd "
 fi
 
+
 sleep 3
 
 
-declare -A osInfo;
-osInfo[/etc/centos-release]="adduser -m -s /sbin/nologin -c 'Apigee platform user' apigee "
-osInfo[/etc/redhat-release]="groupadd -r apigee > useradd -r -g apigee -d /opt/apigee -s /sbin/nologin -c 'Apigee platform user' apigee"
-osInfo[/etc/manjaro-release]="sudo pacman -Syu"
-for f in ${!osInfo[@]}
-do
-    if [[ -f $f ]];then
-        SYSADDUSER=${osInfo[$f]}
-    fi
-done
+echo "1) CentOS"
+echo "2) Redhat OS"
+sleep 3
 
-$SYSADDUSER
+read -p "Please if type The os numbre : " OSNAME;
 
-sleep 5
-echo "6- Create the apigee user and group: "
+case OSNAME in
+
+  1)
+    adduser -m -s /sbin/nologin -c 'Apigee platform user' apigee
+    echo "6- Create the apigee user and group: "
+    ;;
+
+  2)
+    groupadd -r apigee > useradd -r -g apigee -d /opt/apigee -s /sbin/nologin -c 'Apigee platform user' apigee
+    echo "6- Create the apigee user and group: "
+    ;;
+  *)
+    echo "$RED please become a smart ENG $RESET "
+
+    ;;
+esac
+
+echo -e " \t $RED APIGEE USER NOT CREATED PLEASE STOP SCRIP AND CREATE THE USER $RESET"
 sleep 5
 
 curl https://software.apigee.com/bootstrap_4.18.05.sh -o /tmp/bootstrap_4.18.05.sh
