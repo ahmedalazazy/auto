@@ -11,7 +11,7 @@ echo -e "                            Github: $GREEN ahmedalazazy"
 echo -e "$GREEN****************************************************************************************$RESET"
 echo " "
 echo " "
-
+sleep 9
 # Check Root Privileges
 if [[ $EUID -ne 0 ]];
 then
@@ -39,33 +39,39 @@ yum install -y wget htop vim nano curl bash yum-utils yum-plugin-priorities net-
 
 echo "3- install needed tools and utilites "
 sleep 5
-wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
-sleep 5
-sudo rpm -ivh epel-release-latest-7.noarch.rpm
 
-echo "4- add epel  note : on redhat 7 linux GCP image alredy epel install so no issues if you see error"
-sleep 5
-
-
-status="$(rpm -qa | grep libdb4)"
-if [ ! $? = 0 ] || [ ! "$status" = libdb4 ]; then
-
-    echo "libdb4 not installd "
+if yum repolist enabled | grep -q "epel" ; then
+   echo "package epel-release is already installed"
 else
-    echo "libdb4 uninstall it"
-    sudo yum remove libdb4
+    wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
+    sleep 5
+    sudo rpm -ivh epel-release-latest-7.noarch.rpm
 fi
 
+sleep 5
 
-echo "5- If you see that the libdb4 RPM version is later than version 4.8, uninstall it. "
+if rpm -qa | grep -q "libdb4" ; then
+    echo "libdb4 uninstall it"
+    sudo yum remove libdb4 -y
+else
+    echo "libdb4 not installd "
+fi
+
 sleep 3
 
 
-if [  -n "$(uname -a | grep centos)" ]; then
-    adduser -m -s /sbin/nologin -c "Apigee platform user" apigee 
-else
-    groupadd -r apigee > useradd -r -g apigee -d /opt/apigee -s /sbin/nologin -c "Apigee platform user" apigee
-fi  
+declare -A osInfo;
+osInfo[/etc/centos-release]="adduser -m -s /sbin/nologin -c 'Apigee platform user' apigee "
+osInfo[/etc/redhat-release]="groupadd -r apigee > useradd -r -g apigee -d /opt/apigee -s /sbin/nologin -c 'Apigee platform user' apigee"
+osInfo[/etc/manjaro-release]="sudo pacman -Syu"
+for f in ${!osInfo[@]}
+do
+    if [[ -f $f ]];then
+        SYSADDUSER=${osInfo[$f]}
+    fi
+done
+
+$SYSADDUSER
 
 sleep 5
 echo "6- Create the apigee user and group: "
