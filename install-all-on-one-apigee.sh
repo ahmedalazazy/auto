@@ -6,7 +6,7 @@ GREEN='\033[01;35m'
 
 clear
 echo -e "$GREEN****************************************************************************************$RESET"
-echo -e "   This Script for Automate install APGI All in one VM on redhat or CentOS $RESET"
+echo -e "   $GREEN This Script for Automate install APGI All in one VM on redhat or CentOS $RESET"
 echo -e "                            Github: $GREEN ahmedalazazy"
 echo -e "$GREEN****************************************************************************************$RESET"
 echo " "
@@ -69,7 +69,7 @@ sleep 3
 
 read -p "Please if type The os numbre : " OSNAME;
 
-case OSNAME in
+case $OSNAME in
 
   1)
     adduser -m -s /sbin/nologin -c 'Apigee platform user' apigee
@@ -81,7 +81,7 @@ case OSNAME in
     echo "6- Create the apigee user and group: "
     ;;
   *)
-    echo "$RED please become a smart ENG $RESET "
+    echo -e "\t $RED please become a smart ENG $RESET "
 
     ;;
 esac
