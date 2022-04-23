@@ -43,8 +43,8 @@ yum repolist
 yum install php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysql php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc -y
 
 echo "5- install php7.4 &  modules recominded from drupal "
-PHPVERS=$(php --version)
-if $PHPVERS | grep -q "7.4" ; then
+PHVERS=$(php --version)
+if echo "$PHVERS" | grep -q "7.4" ; then
    echo "package php version is 7.4 and already installed"
 else
     echo "Please stop script and cheeck the php version "
@@ -62,8 +62,8 @@ php -r "unlink('composer-setup.php');"
 echo "6- install php composer done "
 sleep 5
 
-echo "1\) CentOS"
-echo "2\) Redhat OS"
+echo "1) CentOS"
+echo "2) Redhat OS"
 
 sleep 3
 
@@ -71,14 +71,15 @@ read -p "Please type The os numbre : " OSNAMEEE;
 
 
 if [ "$OSNAMEEE" -eq "1" ]; then
-cat <<EOF> /etc/yum.repos.d/MariaDB.repo
-    # MariaDB 10.6 CentOS repository list - created 2022-04-21 07:42 UTC
-    # https://mariadb.org/download/
-    [mariadb]
-    name = MariaDB
-    baseurl = https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/10.6/centos7-amd64
-    gpgkey=https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/RPM-GPG-KEY-MariaDB
-    gpgcheck=1
+rm -f /etc/yum.repos.d/MariaDB.repo
+cat <<EOF>> /etc/yum.repos.d/MariaDB.repo
+# MariaDB 10.6 CentOS repository list - created 2022-04-21 07:42 UTC
+# https://mariadb.org/download/
+[mariadb]
+name = MariaDB
+baseurl = https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/10.6/centos7-amd64
+gpgkey=https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/RPM-GPG-KEY-MariaDB
+gpgcheck=1
 EOF
 
     echo "6- add MariaDB 10.6 CentOS repository done "
@@ -89,21 +90,22 @@ EOF
     sleep 3
     echo "5- install mysql done "
     yum install MariaDB-server MariaDB-client -y
-    systemctl start mariadb.service
-    systemctl enable mariadb.service
+    sleep 6
+    systemctl enable --now mariadb.service
+    sleep 6
     mariadb-secure-installation
 
 
 elif [ "$OSNAMEEE" -eq "2" ]; then
-
-cat <<EOF> /etc/yum.repos.d/MariaDB.repo
-    # MariaDB 10.6 RedHat repository list - created  UTC
-    # https://mariadb.org/download/
-    [mariadb]
-    name = MariaDB
-    baseurl = https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/10.6/rhel7-amd64
-    gpgkey=https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/RPM-GPG-KEY-MariaDB
-    gpgcheck=1
+rm -f /etc/yum.repos.d/MariaDB.repo
+cat <<EOF>> /etc/yum.repos.d/MariaDB.repo
+# MariaDB 10.6 RedHat repository list - created  UTC
+# https://mariadb.org/download/
+[mariadb]
+name = MariaDB
+baseurl = https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/10.6/rhel7-amd64
+gpgkey=https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/RPM-GPG-KEY-MariaDB
+gpgcheck=1
 EOF
 
     echo "6- add MariaDB 10.6 CentOS repository done "
@@ -114,8 +116,8 @@ EOF
     sleep 3
     echo "5- install mysql done "
     yum install MariaDB-server MariaDB-client -y
-    systemctl start mariadb.service
-    systemctl enable mariadb.service
+    sleep 6
+    systemctl enable --now mariadb.service
     mysql_secure_installation    
 
 else
@@ -123,8 +125,8 @@ else
 
 fi
 
-if systemctl status mariadb.service | grep -q "runing" ; then
-    echo "7- install DB and run service runing"
+if systemctl status mariadb.service | grep -q "running" ; then
+    echo "7- install DB and run service running"
 else
      echo "7- install DB and run service have an issue please stop script and cheeck"
      exit
@@ -152,8 +154,8 @@ yum install nginx -y
 systemctl start nginx.service
 systemctl enable nginx.service
 
-if systemctl status nginx.service | grep -q "runing" ; then
-    echo "9- install nginx and run service runing"
+if systemctl status nginx.service | grep -q "running" ; then
+    echo "9- install nginx and run service running"
 else
      echo "9- install nginx and run service have an issue please stop script and cheeck"
      exit
@@ -170,8 +172,8 @@ vim /etc/php-fpm.d/www.conf
 systemctl start php-fpm.service
 systemctl enable php-fpm.service
 
-if systemctl status php-fpm.service | grep -q "runing" ; then
-    echo "10- install php-fpm and run service runing"
+if systemctl status php-fpm.service | grep -q "running" ; then
+    echo "10- install php-fpm and run service running"
 else
      echo "10- install php-fpm and run service have an issue please stop script and cheeck"
     exit
@@ -187,8 +189,8 @@ firewall-cmd --add-service={http,https} --permanent
 firewall-cmd --reload
 firewall-cmd --list-all
 
-if systemctl status firewalld | grep -q "runing" ; then
-    echo "11- install firwall and run service runing"
+if systemctl status firewalld | grep -q "running" ; then
+    echo "11- install firwall and run service running"
 else
      echo "11- install firwall and run service have an issue please stop script and cheeck"
      exit
@@ -205,11 +207,11 @@ echo "12-create NGINX configration file done"
 if nginx -t | grep -q "OK" ; then
     echo "13- configration file syntax okay "
     systemctl restart nginx.service
-    if systemctl status nginx.service | grep -q "runing" ; then
-        echo "14- nginx up and run service runing"
+    if systemctl status nginx.service | grep -q "running" ; then
+        echo "14- nginx up and run service running"
 
 else
-     echo "14- nginx service not runing please stop script and cheeck"
+     echo "14- nginx service not running please stop script and cheeck"
      exit
 fi
 
