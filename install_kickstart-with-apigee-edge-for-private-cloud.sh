@@ -58,16 +58,17 @@ php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 php -r "unlink('composer-setup.php');"
 
-
 echo "6- install php composer done "
 sleep 5
 
-echo "1) CentOS"
-echo "2) Redhat OS"
-
-sleep 3
+clear
 
 read -p "Please type The os numbre : " OSNAMEEE;
+echo "1) CentOS"
+echo "2) Redhat OS"
+sleep 5
+
+
 
 
 if [ "$OSNAMEEE" -eq "1" ]; then
@@ -149,7 +150,7 @@ sleep 6
 sleep 6
 echo "please You must add the max_allowed_packet=64M parameter to the [server] section"
 echo "file opining now to edite and save"
-sleep 6
+sleep 10
 vim /etc/my.cnf.d/server.cnf 
 
 yum install nginx -y
@@ -167,7 +168,7 @@ sleep 5
 sleep 6
 echo "Open /etc/php-fpm.d/www.conf and change the user and group to 'nginx'"
 echo "file opining now to edite and save"
-sleep 5
+sleep 10
 
 vim /etc/php-fpm.d/www.conf
 
