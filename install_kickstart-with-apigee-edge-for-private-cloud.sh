@@ -43,13 +43,13 @@ yum repolist
 yum install php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysql php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc -y
 
 echo "5- install php7.4 &  modules recominded from drupal "
-
-if php --version | grep -q "7.4" ; then
+PHPVERS=$(php --version)
+if $PHPVERS | grep -q "7.4" ; then
    echo "package php version is 7.4 and already installed"
 else
     echo "Please stop script and cheeck the php version "
     exit
-if
+fi
 
 sleep 6
 
@@ -59,11 +59,11 @@ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 php -r "unlink('composer-setup.php');"
 
 
-echo "5- install php composer done "
+echo "6- install php composer done "
 sleep 5
 
-echo "1) CentOS"
-echo "2) Redhat OS"
+echo "1\) CentOS"
+echo "2\) Redhat OS"
 
 sleep 3
 
