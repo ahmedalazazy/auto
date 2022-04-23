@@ -63,9 +63,10 @@ sleep 5
 
 clear
 
-read -p "Please type The os numbre : " OSNAMEEE;
+echo ""
 echo "1) CentOS"
 echo "2) Redhat OS"
+read -p "Please type The os numbre : " OSNAMEEE;
 sleep 5
 
 
@@ -139,10 +140,12 @@ read -p "Please type the new DB USER : " USER;
 read -p "Please type the new DB PASS : " PASS;
 mysql -uroot -p'$ROOTPASSWORD' -e "CREATE DATABASE $DB CHARACTER SET utf8 COLLATE utf8_general_ci";
 echo "create dp"
-mysql -uroot -p'$ROOTPASSWORD' -e "CREATE USER $USER@'127.0.0.1' IDENTIFIED BY '$PASS'";
+mysql -uroot -p'$ROOTPASSWORD' -e "CREATE USER $USER@'localhost' IDENTIFIED BY '$PASS'";
 echo "create dp user"
-mysql -uroot -p'$ROOTPASSWORD' -e "GRANT SELECT, INSERT, UPDATE ON $DB.* TO '$USER'@'127.0.0.1'";
+mysql -uroot -p'$ROOTPASSWORD' -e "GRANT ALL PRIVILEGES ON * . * TO '$USER'@'%' IDENTIFIED BY '$PASS'";
 echo "create permitions"
+mysql -uroot -p'$ROOTPASSWORD' -e "FLUSH PRIVILEGES";
+echo "FLUSH PRIVILEGES"
 
 
 echo "8-create DB & add new user done"
@@ -150,7 +153,7 @@ sleep 6
 sleep 6
 echo "please You must add the max_allowed_packet=64M parameter to the [server] section"
 echo "file opining now to edite and save"
-sleep 10
+sleep 19
 vim /etc/my.cnf.d/server.cnf 
 
 yum install nginx -y
@@ -168,7 +171,7 @@ sleep 5
 sleep 6
 echo "Open /etc/php-fpm.d/www.conf and change the user and group to 'nginx'"
 echo "file opining now to edite and save"
-sleep 10
+sleep 19
 
 vim /etc/php-fpm.d/www.conf
 
