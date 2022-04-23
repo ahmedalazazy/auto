@@ -28,7 +28,7 @@ yum install git zip unzip wget htop vim nano git curl bash net-tools tree yum-ut
 
 echo "2- install needed tools and utilites "
 sleep 5
-yum install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum install https://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
 echo "3- install needed remi repo "
 sleep 5
 yum repolist
@@ -36,11 +36,11 @@ yum -y update
 
 yum-config-manager --disable 'remi-php*'
 
-yum-config-manager --enable remi-php74
+yum-config-manager --enable remi-php74 
 
 echo "4- enable php7.4 repo   "
 yum repolist
-yum install php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysql php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc
+yum install php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysql php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc -y
 
 echo "5- install php7.4 &  modules recominded from drupal "
 if php --version | grep -q "7.4" ; then
@@ -63,7 +63,7 @@ read -p "Please type The os numbre : " OSNAME;
 case $OSNAME in
 
   1)
-    cat <<EOF> /etc/yum.repos.d/MariaDB.repo
+cat <<EOF> /etc/yum.repos.d/MariaDB.repo
     # MariaDB 10.6 CentOS repository list - created 2022-04-21 07:42 UTC
     # https://mariadb.org/download/
     [mariadb]
@@ -71,8 +71,7 @@ case $OSNAME in
     baseurl = https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/10.6/centos7-amd64
     gpgkey=https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/RPM-GPG-KEY-MariaDB
     gpgcheck=1
-
-    EOF
+EOF
 
     echo "6- add MariaDB 10.6 CentOS repository done "
     sleep 6
@@ -88,7 +87,7 @@ case $OSNAME in
     ;;
 
   2)
-    cat <<EOF> /etc/yum.repos.d/MariaDB.repo
+cat <<EOF> /etc/yum.repos.d/MariaDB.repo
     # MariaDB 10.6 RedHat repository list - created  UTC
     # https://mariadb.org/download/
     [mariadb]
@@ -96,8 +95,7 @@ case $OSNAME in
     baseurl = https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/10.6/rhel7-amd64
     gpgkey=https://mirror1.hs-esslingen.de/pub/Mirrors/mariadb/yum/RPM-GPG-KEY-MariaDB
     gpgcheck=1
-
-    EOF
+EOF
 
     echo "6- add MariaDB 10.6 CentOS repository done "
     sleep 6
