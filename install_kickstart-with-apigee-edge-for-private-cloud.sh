@@ -144,7 +144,7 @@ mysql -uroot -p'$ROOTPASSWORD' -e "grant all on $DB.* to '$USER' identified by '
 
 echo "8-create DB & add new user done"
 sleep 6
-
+sleep 6
 echo "please You must add the max_allowed_packet=64M parameter to the [server] section"
 echo "file opining now to edite and save"
 sleep 6
@@ -162,7 +162,7 @@ else
 fi
 
 sleep 5
-
+sleep 6
 echo "Open /etc/php-fpm.d/www.conf and change the user and group to 'nginx'"
 echo "file opining now to edite and save"
 sleep 5
@@ -202,13 +202,10 @@ sleep 5
 curl https://raw.githubusercontent.com/ahmedalazazy/auto/main/nginxconfigration -o /etc/nginx/conf.d/drupal-nginx.conf
 
 echo "12-create NGINX configration file done"
-
-
-if nginx -t | grep -q "OK" ; then
-    echo "13- configration file syntax okay "
-    systemctl restart nginx.service
-    if systemctl status nginx.service | grep -q "running" ; then
-        echo "14- nginx up and run service running"
+systemctl restart nginx.service
+NGNGNGSTATUS=$(systemctl status nginx.service )
+if echo "$NGNGNGSTATUS" | grep -q "running" ; then
+    echo "14- nginx up and run service running"
 
 else
      echo "14- nginx service not running please stop script and cheeck"
