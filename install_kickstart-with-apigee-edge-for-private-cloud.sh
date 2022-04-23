@@ -24,7 +24,7 @@ echo " "
 yum update -y
 echo "1-System updated  "
 sleep 3
-yum install git zip unzip wget htop vim nano git curl bash net-tools tree yum-utils dig firewalld gzip -y
+yum install git zip unzip wget htop vim nano git curl bash net-tools tree yum-utils dig firewalld gzip bind-utils -y
 
 echo "2- install needed tools and utilites "
 sleep 5
@@ -215,15 +215,19 @@ fi
 mkdir -p /var/www
 adduser devportal
 chown -R devportal:devportal /var/www
+
+
 su - devportal
 cd /var/www
 echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile
 source ~/.bash_profile
 
-composer config disable-tls false composer create-project apigee/devportal-kickstart-project:9.x-dev portal --no-interaction composer install
+PACKAGISTIP=$(dig packagist.org +short)
+echo "$PACKAGISTIP packagist.org" >>/etc/hosts
+composer create-project apigee/devportal-kickstart-project:9.x-dev devportal --no-interaction
 
 cd /var/www/devportal/web/sites/default
-cp default.settings.php settings.php
+yes |cp default.settings.php settings.php
 chown -R devportal:nginx settings.php
 chmod 660 settings.php
 
@@ -251,8 +255,8 @@ find . -type d -exec chmod ug=rwx,o= '{}' \;
 find . -type f -exec chmod ug=rw,o= '{}' \;
 chcon -R -t httpd_sys_content_rw_t /var/www/devportal/private
 
-cat "\$settings['file_private_path'] = '/var/www/devportal/private';" >>/var/www/devportal/web/sites/default/settings.php
+echo "\$settings['file_private_path'] = '/var/www/devportal/private';" >>/var/www/devportal/web/sites/default/settings.php
 
-cd /temp/
+cd /tmp/
 wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
-mv drush.phar /usr/local/bin/drush
+yes| mv drush.phar /usr/local/bin/drush
