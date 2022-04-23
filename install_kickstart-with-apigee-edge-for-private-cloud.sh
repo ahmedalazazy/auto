@@ -43,26 +43,34 @@ yum repolist
 yum install php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysql php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc -y
 
 echo "5- install php7.4 &  modules recominded from drupal "
+
 if php --version | grep -q "7.4" ; then
    echo "package php version is 7.4 and already installed"
 else
     echo "Please stop script and cheeck the php version "
+    exit
 if
+
 sleep 6
-php --modules
+
+
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 php -r "unlink('composer-setup.php');"
+
+
 echo "5- install php composer done "
 sleep 5
 
 echo "1) CentOS"
 echo "2) Redhat OS"
-sleep 3
-read -p "Please type The os numbre : " OSNAME;
-case $OSNAME in
 
-  1)
+sleep 3
+
+read -p "Please type The os numbre : " OSNAMEEE;
+
+
+if [ "$OSNAMEEE" -eq "1" ]; then
 cat <<EOF> /etc/yum.repos.d/MariaDB.repo
     # MariaDB 10.6 CentOS repository list - created 2022-04-21 07:42 UTC
     # https://mariadb.org/download/
@@ -84,9 +92,10 @@ EOF
     systemctl start mariadb.service
     systemctl enable mariadb.service
     mariadb-secure-installation
-    ;;
 
-  2)
+
+elif [ "$OSNAMEEE" -eq "2" ]; then
+
 cat <<EOF> /etc/yum.repos.d/MariaDB.repo
     # MariaDB 10.6 RedHat repository list - created  UTC
     # https://mariadb.org/download/
@@ -108,12 +117,11 @@ EOF
     systemctl start mariadb.service
     systemctl enable mariadb.service
     mysql_secure_installation    
-    ;;
-  *)
-    echo -e "\t $RED please become a smart ENG $RESET "
-    exit
-    ;;
-esac
+
+else
+    echo -e "\t $RED please become a smart ENG $RESET " 
+
+fi
 
 if systemctl status mariadb.service | grep -q "runing" ; then
     echo "7- install DB and run service runing"
