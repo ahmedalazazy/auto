@@ -136,10 +136,12 @@ read -p "Please type the DB root password you are created on the top: " ROOTPASS
 read -p "Please type the new DB name : " DB;
 read -p "Please type the new DB USER : " USER;
 read -p "Please type the new DB PASS : " PASS;
-mysql -uroot -p'$ROOTPASSWORD' -e "create database $DB";
-mysql -uroot -p'$ROOTPASSWORD' -e "create user '$USER'@'localhost' identified by '$PASS'";
-mysql -uroot -p'$ROOTPASSWORD' -e "grant all on $DB.* to '$USER' identified by '$PASS'";
-
+mysql -uroot -p'$ROOTPASSWORD' -e "CREATE DATABASE $DB CHARACTER SET utf8 COLLATE utf8_general_ci";
+echo "create dp"
+mysql -uroot -p'$ROOTPASSWORD' -e "CREATE USER $USER@'127.0.0.1' IDENTIFIED BY '$PASS'";
+echo "create dp user"
+mysql -uroot -p'$ROOTPASSWORD' -e "GRANT SELECT, INSERT, UPDATE ON $DB.* TO '$USER'@'127.0.0.1'";
+echo "create permitions"
 
 
 echo "8-create DB & add new user done"
@@ -153,7 +155,7 @@ vim /etc/my.cnf.d/server.cnf
 yum install nginx -y
 systemctl start nginx.service
 systemctl enable nginx.service
-
+:
 if systemctl status nginx.service | grep -q "running" ; then
     echo "9- install nginx and run service running"
 else
@@ -216,22 +218,16 @@ mkdir -p /var/www
 adduser devportal
 chown -R devportal:devportal /var/www
 
+cd /tmp/
+wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
+yes|mv drush.phar /usr/local/bin/drush
 
-su - devportal
-cd /var/www
-echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile
-source ~/.bash_profile
 
 PACKAGISTIP=$(dig packagist.org +short)
 echo "$PACKAGISTIP packagist.org" >>/etc/hosts
-composer create-project apigee/devportal-kickstart-project:9.x-dev devportal --no-interaction
 
-cd /var/www/devportal/web/sites/default
-yes |cp default.settings.php settings.php
-chown -R devportal:nginx settings.php
-chmod 660 settings.php
-
-sudo su - root
+su - devportal -c 'cd /var/www && echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile && source ~/.bash_profile && composer create-project apigee/devportal-kickstart-project:9.x-dev devportal --no-interaction && cd /var/www/devportal/web/sites/default && yes |cp default.settings.php settings.php && chmod 660 settings.php'
+cd /var/www/devportal/web/sites/default && chown -R devportal:nginx settings.php
 cd /var/www/devportal/web
 chown -R devportal:nginx .
 find . -type d -exec chmod u=rwx,g=rx,o= '{}' \;
@@ -256,7 +252,3 @@ find . -type f -exec chmod ug=rw,o= '{}' \;
 chcon -R -t httpd_sys_content_rw_t /var/www/devportal/private
 
 echo "\$settings['file_private_path'] = '/var/www/devportal/private';" >>/var/www/devportal/web/sites/default/settings.php
-
-cd /tmp/
-wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
-yes| mv drush.phar /usr/local/bin/drush
