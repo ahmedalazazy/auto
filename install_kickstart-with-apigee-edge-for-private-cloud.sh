@@ -142,7 +142,7 @@ mysql -uroot -p'$ROOTPASSWORD' -e "CREATE DATABASE $DB CHARACTER SET utf8 COLLAT
 echo "create dp"
 mysql -uroot -p'$ROOTPASSWORD' -e "CREATE USER $USER@'localhost' IDENTIFIED BY '$PASS'";
 echo "create dp user"
-mysql -uroot -p'$ROOTPASSWORD' -e "GRANT ALL PRIVILEGES ON * . * TO '$USER'@'%' IDENTIFIED BY '$PASS'";
+mysql -uroot -p'$ROOTPASSWORD' -e "GRANT ALL PRIVILEGES ON * . * TO '$USER'@'localhost' IDENTIFIED BY '$PASS'";
 echo "create permitions"
 mysql -uroot -p'$ROOTPASSWORD' -e "FLUSH PRIVILEGES";
 echo "FLUSH PRIVILEGES"
