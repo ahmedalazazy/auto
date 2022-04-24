@@ -144,8 +144,6 @@ mysql -uroot -p'$ROOTPASSWORD' -e "CREATE USER $USER@'localhost' IDENTIFIED BY '
 echo "create dp user"
 mysql -uroot -p'$ROOTPASSWORD' -e "GRANT ALL PRIVILEGES ON * . * TO '$USER'@'localhost' IDENTIFIED BY '$PASS'";
 echo "create permitions"
-mysql -uroot -p'$ROOTPASSWORD' -e "FLUSH PRIVILEGES";
-echo "FLUSH PRIVILEGES"
 
 
 echo "8-create DB & add new user done"
