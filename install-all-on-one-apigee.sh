@@ -6,7 +6,7 @@ GREEN='\033[01;35m'
 
 clear
 echo -e "$GREEN****************************************************************************************$RESET"
-echo -e "   $GREEN This Script for Automate install APGI All in one VM on redhat or CentOS $RESET"
+echo -e "   This Script for Automate install APGI All in one VM on redhat or CentOS $RESET"
 echo -e "                            Github: $GREEN ahmedalazazy"
 echo -e "$GREEN****************************************************************************************$RESET"
 echo " "
@@ -29,13 +29,18 @@ read -p "Please type the apigeeuser proved py apige subscription : " UUUSSSESR;
 read -p "Please type the apigeepassword proved py apige subscription : " PASSSWORDDD;
 sudo setenforce 0
 echo "1-setenforce 0 selinux done"
+echo "please change to SELINUX=disabled"
+sleep 6
+vim /etc/sysconfig/selinux
+systemctl stop firewalld
+systemctl disable firewalld
 sleep 5
 
 sudo yum update -y
 sleep 5
 echo "5-System updated  "
 sleep 5
-yum install -y wget htop vim nano curl bash yum-utils yum-plugin-priorities net-tools tree yum-utils gzip 
+yum install -y wget htop vim nano curl bash yum-utils yum-plugin-priorities net-tools tree yum-utils gzip git zip unzip
 
 echo "3- install needed tools and utilites "
 sleep 5
@@ -63,45 +68,38 @@ fi
 sleep 3
 
 
-if cat "/etc/passwd" | grep -q "apigee" ; then
-   echo "The apigee USER already created"
-else
+echo "1) CentOS"
+echo "2) Redhat OS"
+sleep 3
 
+read -p "Please if type The os numbre : " OSNAME;
 
-    echo "1) CentOS"
-    echo "2) Redhat OS"
-    sleep 2
+case $OSNAME in
 
-    read -p "Please if type The os numbre : " OSNAME;
+  1)
+    adduser -m -s /sbin/nologin -c 'Apigee platform user' apigee
+    echo "6- Create the apigee user and group: "
+    ;;
 
-    case $OSNAME in
+  2)
+    groupadd -r apigee > useradd -r -g apigee -d /opt/apigee -s /sbin/nologin -c 'Apigee platform user' apigee
+    echo "6- Create the apigee user and group: "
+    ;;
+  *)
+    echo -e "\t $RED please become a smart ENG $RESET "
 
-      1)
-        adduser -m -s /sbin/nologin -c 'Apigee platform user' apigee
-        echo "6- Create the apigee user and group: "
-        ;;
+    ;;
+esac
 
-      2)
-        groupadd -r apigee > useradd -r -g apigee -d /opt/apigee -s /sbin/nologin -c 'Apigee platform user' apigee
-        echo "6- Create the apigee user and group: "
-        ;;
-      *)
-        echo -e "\t $RED please become a smart ENG $RESET "
-        echo -e " \t $RED APIGEE USER NOT CREATED PLEASE STOP SCRIP AND CREATE THE USER $RESET"
-        ;;
-      esac
-
-fi
-
-
+echo -e " \t $RED APIGEE USER NOT CREATED PLEASE STOP SCRIP AND CREATE THE USER $RESET"
 sleep 5
-
-curl https://software.apigee.com/bootstrap_4.18.05.sh -o /tmp/bootstrap_4.18.05.sh
+export CURRENT_VER=$(curl -s https://storage.googleapis.com/cloud-training/CBL318/current_opdk_version.txt?ignoreCache=1)
+sudo curl -s https://software.apigee.com/bootstrap_${CURRENT_VER}.sh -o /tmp/apigee/bootstrap_${CURRENT_VER}.sh
 echo "7- download bootstrap instalittion file  "
 sleep 5
 echo "if asking you to install openjdk type 1 or accept"
 sleep 5
-sudo bash /tmp/bootstrap_4.18.05.sh apigeeuser="$UUUSSSESR" apigeepassword="$PASSSWORDDD"
+sudo bash /tmp/bootstrap_${CURRENT_VER}.sh apigeeuser="$UUUSSSESR" apigeepassword="$PASSSWORDDD"
 
 echo "8- exec bootstrap installationon file to add apigee repo"
 sleep 5
@@ -126,7 +124,7 @@ sleep 5
 echo "https://docs.apigee.com/private-cloud/v4.19.06/install-edge-components-node#installedgecomponents-allinoneinstallation"
 sleep 5
 vim /tmp/configFile
-
+/opt/apigee/var/log/apigee-setup/setup.log
 echo "please validate no isseis on test /tmp/configFile seting as below"
 sleep 5
 /opt/apigee/apigee-setup/bin/setup.sh -p aio -f /tmp/configFile -t
@@ -139,6 +137,10 @@ sleep 5
 echo "https://docs.apigee.com/private-cloud/v4.51.00/onboard-organization"
 sleep 5
 
-vim /tmp/configFile2
+vim /tmp/onfigcration_file
 sleep 5
-/opt/apigee/apigee-service/bin/apigee-service apigee-provision create-org -f /tmp/configFile2
+/opt/apigee/apigee-service/bin/apigee-service apigee-provision setup-org -f onfigcration_file
+/opt/apigee/apigee-service/bin/apigee-service apigee-provision add-env
+
+/opt/apigee/apigee-service/bin/apigee-service edge-ui restart
+/opt/apigee/apigee-service/bin/apigee-all enable_autostart
