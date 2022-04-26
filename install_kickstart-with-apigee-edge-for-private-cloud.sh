@@ -1,4 +1,9 @@
 #!/bin/bash
+
+#to run this script on VM
+#sudo su - root -c 'curl https://raw.githubusercontent.com/ahmedalazazy/auto/main/install_kickstart-with-apigee-edge-for-private-cloud.sh -o /tmp/installition.sh && chmod +x /tmp/installition.sh && bash /tmp/installition.sh'
+
+
 RED='\033[01;31m'
 RESET='\033[0m'
 GREEN='\033[01;35m'
@@ -144,6 +149,8 @@ mysql -uroot -p'$ROOTPASSWORD' -e "CREATE USER $USER@'localhost' IDENTIFIED BY '
 echo "create dp user"
 mysql -uroot -p'$ROOTPASSWORD' -e "GRANT ALL PRIVILEGES ON * . * TO '$USER'@'localhost' IDENTIFIED BY '$PASS'";
 echo "create permitions"
+mysql -uroot -p'$ROOTPASSWORD' -e "FLUSH PRIVILEGES";
+echo "FLUSH PRIVILEGES"
 
 
 echo "8-create DB & add new user done"
@@ -228,7 +235,7 @@ yes|mv drush.phar /usr/local/bin/drush
 PACKAGISTIP=$(dig packagist.org +short)
 echo "$PACKAGISTIP packagist.org" >>/etc/hosts
 
-su - devportal -c 'cd /var/www && echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile && source ~/.bash_profile && composer create-project apigee/devportal-kickstart-project:9.x-dev devportal --no-interaction && cd /var/www/devportal/web/sites/default && yes |cp default.settings.php settings.php && chmod 660 settings.php'
+sudo su - devportal -c 'cd /var/www && echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile && source ~/.bash_profile && composer create-project apigee/devportal-kickstart-project:9.x-dev devportal --no-interaction && cd /var/www/devportal/web/sites/default && yes |cp default.settings.php settings.php && chmod 660 settings.php'
 cd /var/www/devportal/web/sites/default && chown -R devportal:nginx settings.php
 cd /var/www/devportal/web
 chown -R devportal:nginx .
@@ -254,3 +261,9 @@ find . -type f -exec chmod ug=rw,o= '{}' \;
 chcon -R -t httpd_sys_content_rw_t /var/www/devportal/private
 
 echo "\$settings['file_private_path'] = '/var/www/devportal/private';" >>/var/www/devportal/web/sites/default/settings.php
+
+
+
+echo "Validate connicton please frpm portal to apigee Management server using the below command "
+
+echo "curl -v -u 'systemAdmin Email' http://APIGRE_MG_IP:8080/v1/o/'ORG_NAME'"
