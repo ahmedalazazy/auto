@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#to run this script on VM
+#sudo su - root -c 'curl https://raw.githubusercontent.com/ahmedalazazy/auto/main/install-all-on-one-apigee.sh -o /tmp/installition.sh && chmod +x /tmp/installition.sh && bash /tmp/installition.sh'
+
 RED='\033[01;31m'
 RESET='\033[0m'
 GREEN='\033[01;35m'
@@ -56,7 +59,7 @@ fi
 
 sleep 5
 
-
+yum-config-manager --enable ol7_optional_latest
 if rpm -qa | grep -q "libdb4" ; then
     echo "libdb4 uninstall it"
     sudo yum remove libdb4 -y
@@ -77,7 +80,7 @@ read -p "Please if type The os numbre : " OSNAME;
 case $OSNAME in
 
   1)
-    adduser -m -s /sbin/nologin -c 'Apigee platform user' apigee
+    adduser -m -d /opt/apigee -s /sbin/nologin -c 'Apigee platform user' apigee
     echo "6- Create the apigee user and group: "
     ;;
 
@@ -87,14 +90,17 @@ case $OSNAME in
     ;;
   *)
     echo -e "\t $RED please become a smart ENG $RESET "
-
+    echo -e " \t $RED APIGEE USER NOT CREATED PLEASE STOP SCRIP AND CREATE THE USER $RESET"
     ;;
 esac
+mkdir /srv/myInstallDir
+ln -Ts /srv/myInstallDir /opt/apigee
 
-echo -e " \t $RED APIGEE USER NOT CREATED PLEASE STOP SCRIP AND CREATE THE USER $RESET"
+chown -h apigee:apigee /srv/myInstallDir /opt/apigee
+
 sleep 5
 export CURRENT_VER=$(curl -s https://storage.googleapis.com/cloud-training/CBL318/current_opdk_version.txt?ignoreCache=1)
-sudo curl -s https://software.apigee.com/bootstrap_${CURRENT_VER}.sh -o /tmp/apigee/bootstrap_${CURRENT_VER}.sh
+sudo curl -s https://software.apigee.com/bootstrap_${CURRENT_VER}.sh -o /tmp/bootstrap_${CURRENT_VER}.sh
 echo "7- download bootstrap instalittion file  "
 sleep 5
 echo "if asking you to install openjdk type 1 or accept"
@@ -139,8 +145,7 @@ sleep 5
 
 vim /tmp/onfigcration_file
 sleep 5
-/opt/apigee/apigee-service/bin/apigee-service apigee-provision setup-org -f onfigcration_file
+/opt/apigee/apigee-service/bin/apigee-service apigee-provision setup-org -f /tmp/onfigcration_file
 /opt/apigee/apigee-service/bin/apigee-service apigee-provision add-env
-
-/opt/apigee/apigee-service/bin/apigee-service edge-ui restart
 /opt/apigee/apigee-service/bin/apigee-all enable_autostart
+/opt/apigee/apigee-service/bin/apigee-service edge-ui restart
