@@ -3,7 +3,7 @@
 #to run this script on VM
 #sudo su - root -c 'curl https://raw.githubusercontent.com/ahmedalazazy/auto/main/install_kickstart-with-apigee-edge-for-private-cloud.sh -o /tmp/installition.sh && chmod +x /tmp/installition.sh && bash /tmp/installition.sh'
 
-
+#!/bin/bash
 RED='\033[01;31m'
 RESET='\033[0m'
 GREEN='\033[01;35m'
@@ -161,7 +161,7 @@ vim /etc/my.cnf.d/server.cnf
 yum install nginx -y
 systemctl start nginx.service
 systemctl enable nginx.service
-:
+
 if systemctl status nginx.service | grep -q "running" ; then
     echo "9- install nginx and run service running"
 else
@@ -246,19 +246,20 @@ find . -type d -exec chmod ug=rwx,o= '{}' \;
 find . -type f -exec chmod ug=rw,o= '{}' \;
 
 chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default
+chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/files 
+chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/settings.php
 
-
-cd /var/www/devportal
-mkdir private
-cd private
+mkdir /var/www/private
+cd /var/www/private
 
 chown -R devportal:nginx .
 find . -type d -exec chmod ug=rwx,o= '{}' \;
 find . -type f -exec chmod ug=rw,o= '{}' \;
-chcon -R -t httpd_sys_content_rw_t /var/www/devportal/private
+chcon -R -t httpd_sys_content_rw_t /var/www/private
 
-echo "\$settings['file_private_path'] = '/var/www/devportal/private';" >>/var/www/devportal/web/sites/default/settings.php
+echo "\$settings['file_private_path'] = '/var/www/private';" >>/var/www/devportal/web/sites/default/settings.php
 
+setsebool -P httpd_can_network_connect on
 
 
 echo "Validate connicton please frpm portal to apigee Management server using the below command "
