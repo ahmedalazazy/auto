@@ -260,7 +260,8 @@ chcon -R -t httpd_sys_content_rw_t /var/www/private
 echo "\$settings['file_private_path'] = '/var/www/private';" >>/var/www/devportal/web/sites/default/settings.php
 
 setsebool -P httpd_can_network_connect on
-
+#chmod 644 /var/www/devportal/web/sites/default/settings.php
+#chmod 755 /var/www/devportal/web/sites/default
 
 echo "Validate connicton please frpm portal to apigee Management server using the below command "
 
