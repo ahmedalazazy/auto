@@ -77,6 +77,10 @@ case $OSV in
         ;;
     4)
         read -p "Please type LICENSE_URIS you need to use : " LICENSE_URIS;
+        read -p "Please type OS_NAME you need to use : " OS_NAME;
+        ;;
+    *)
+        echo "some fucking error and script cant understand error to handle it" 
         ;;
 esac
 
@@ -89,13 +93,49 @@ echo "step 2 from 10"
 gcloud compute images create "${APPENDED_IMAGE_FROM_OLD_DISK}" --project="${WORKINGPROJECT}" --source-disk="${OLD_BOOT_DISK_NAME}"  --source-disk-zone="${OLD_DISK_ZONE}"
 echo " "
 
-echo "step 3 from 10"
+echo "step 3 from 10 export disk to vmdk"
 gcloud compute images export --destination-uri="${DESTINATION_VMDK_URI}" --image="${APPENDED_IMAGE_FROM_OLD_DISK}" --project="${WORKINGPROJECT}" --timeout="24h" --export-format=vhdx
-echo " "
 
-echo "step 4 from 10"
+case $? in
+    0)
+        echo "export success god job Azazy :)" 
+        sleep 5
+        ;;
+    1)
+
+        echo "export failed"
+        echo "step run to traing again"
+        gcloud compute images export --destination-uri="${DESTINATION_VMDK_URI}" --image="${APPENDED_IMAGE_FROM_OLD_DISK}" --project="${WORKINGPROJECT}" --timeout="24h" --export-format=vhdx
+        sleep 5
+        ;;
+    *)
+        echo "export step facing some fucking error and script cant understand error to handle it"   
+        sleep 5
+        ;;  
+esac  
+
+
+
+echo "step 4  from 10 import image"  
 gcloud compute images import "${IMPORTED_IMAGE_FROM_VMDK}" --source-file="${DESTINATION_VMDK_URI}" --guest-environment --os="${OS_NAME}"  --project="${WORKINGPROJECT}" --timeout="24h"
-echo " "
+
+case $? in
+    0)
+        echo "import success god job Azazy :)"  
+        sleep 5
+        ;;
+    1)
+
+        echo "import failed"
+        echo "step run to traing import again"
+        gcloud compute images import "${IMPORTED_IMAGE_FROM_VMDK}" --source-file="${DESTINATION_VMDK_URI}" --guest-environment --os="${OS_NAME}"  --project="${WORKINGPROJECT}" --timeout="24h"
+        sleep 5
+        ;;
+    *)
+        echo "import step facing some fucking error and script cant understand error to handle it"   
+        sleep 5
+        ;;  
+esac  
 
 echo "step 5 from 10"
 gcloud compute disks create "${NEW_BOOT_DISK_NAME}" --image="${IMPORTED_IMAGE_FROM_VMDK}"  --type="${OLD_DISK_TYPE}"
@@ -114,7 +154,7 @@ gcloud compute instances add-metadata "${VM_NAME}" --metadata=license_url="${LIC
 echo " "
 
 echo "step 9 from 10"
-gcloud compute instances set-scheduling "${VM_NAME} "--node-group="${NODEGROUPNAME}" --maintenance-policy="MIGRATE" --restart-on-failure --zone="${VM_ZONE}" --project="${WORKINGPROJECT}"
+gcloud compute instances set-scheduling "${VM_NAME}" --node-group="${NODEGROUPNAME}" --maintenance-policy="MIGRATE" --restart-on-failure --zone="${VM_ZONE}" --project="${WORKINGPROJECT}"
 echo " "
 
 echo "step 10 from 10"
