@@ -15,13 +15,16 @@ echo -e "                        \t   $RED Hi $USER $RESET"
 echo " "
 
 echo "Using this Script to rename Instans Name on GCP";
-echo "This process will stop INSTANS";
-read -p "Please Enter Instans Name" CURRENT_NAME;
-read -p "Please Enter New Instans Name" NEW_NAME;
-read -p "Please Enter Instans ZONE" ZONE;
-gcloud compute instances stop "$CURRENT_NAME" --zone "$ZONE"
+echo "This process will stop INSTANS : ";
+read -p "Please Enter Instans Name: " CURRENT_NAME;
+read -p "Please Enter New Instans Name : " NEW_NAME;
+read -p "Please Enter Instans ZONE: " ZONE;
+read -p "Please Enter Project ID : " PROJE;
+gcloud compute instances stop "$CURRENT_NAME" --zone "$ZONE"  --project="$PROJE"
+
 echo "VM In Stoping process"
-gcloud beta compute instances set-name "$CURRENT_NAME" --zone "$ZONE" --new-name="$NEW_NAME"
+gcloud beta compute instances set-name "$CURRENT_NAME" --zone "$ZONE" --new-name="$NEW_NAME" --project="$PROJE"
 echo "VM In rename process"
-gcloud compute instances start "$NEW_NAME" --zone "$ZONE"
+gcloud compute instances start "$NEW_NAME" --zone "$ZONE"  --project="$PROJE"
+
 echo "VM started with New Name $NEW_NAME"
