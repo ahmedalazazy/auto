@@ -1,10 +1,5 @@
 #!/bin/python3
-import csv
-import random
-import subprocess
-import sys
-import time
-import os
+import csv, random, subprocess, sys, time, os, json
 
 
 project_id = ""
@@ -215,10 +210,25 @@ elif sys.argv[1:][0] == 'create-mi-to-anther-project':
 #        with open(f'{LOGSFILEPATH}', 'a', newline='') as csvfile:
 #             writer = csv.writer(csvfile)
 #             writer.writerow(f'{LOGST}')        
+########################################################################################
+elif sys.argv[1:][0] == 'turn-off-all-the-firewall-logs-in-project':
+    print('welcome to create mi to anther project')
+    # Set the project ID
+    project_id = input("Please Enter the PROJECT ID:")
+    # Run the gcloud command to list all the firewall rules in the project
+    list_command = f'gcloud compute firewall-rules list --project={project_id} --format=json'
+    output = subprocess.check_output(list_command.split()).decode('utf-8')
 
+    # Parse the JSON output into a list of dictionaries representing each firewall rule
+    rules = json.loads(output)
 
+    # Loop over the list of firewall rules and update each one to turn off logging
+    for rule in rules:
+        update_command = f'gcloud compute firewall-rules update {rule["name"]} --no-enable-logging --project={project_id}'
+        subprocess.Popen(update_command.split())
+        print(f'Firewall rule {rule["name"]} updated successfully.')
 
-
+    print('All firewall rules updated successfully.')
 #####################################################
 elif sys.argv[1:][0] == 'add-tags':
     print('welcome to add add-tags to vm')
