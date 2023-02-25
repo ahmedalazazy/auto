@@ -35,6 +35,13 @@ TEMPLATE_NAME="SAP_HANA_HA_SECONDARY"
 ##########################################################################
 ## Start includes
 ##########################################################################
+readonly PRIMARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigprdhana1)" --project=aig-sap-dev)
+readonly SECONDARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigprdhana2)" --project=aig-sap-dev)
+echo "${PRIMARY_NODE_IP} line 1384"
+echo "${SECONDARY_NODE_IP} line 1385"
+echo "${PRIMARY_NODE_IP} aigprdhana1" >> /etc/hosts
+echo "${SECONDARY_NODE_IP} aigprdhana2" >> /etc/hosts
+
 
 
 set +e
@@ -2182,6 +2189,14 @@ metrics::get_token() {
 ##########################################################################
 ## End includes
 ##########################################################################
+
+
+readonly PRIMARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigprdhana1)" --project=aig-sap-dev)
+readonly SECONDARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigprdhana2)" --project=aig-sap-dev)
+echo "${PRIMARY_NODE_IP} sazazy"
+echo "${SECONDARY_NODE_IP} sazazy"
+echo "${PRIMARY_NODE_IP} aigprdhana1" >> /etc/hosts
+echo "${SECONDARY_NODE_IP} aigprdhana2" >> /etc/hosts
 
 ## Base GCP and OS Configuration
 main::get_os_version
