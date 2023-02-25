@@ -1380,13 +1380,14 @@ ha::check_settings() {
 
   # Set additional global constants
   sleep "60"
-
   readonly PRIMARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigprdhana1)" --project=aig-sap-dev)
-  readonly SECONDARY_NODE_IP$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigprdhana1)" --project=aig-sap-dev)
+  readonly SECONDARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigprdhana2)" --project=aig-sap-dev)
 #  readonly PRIMARY_NODE_IP=$(ping "${VM_METADATA[sap_primary_instance]}" -c 1 | head -1 | awk  '{ print $3 }' | sed 's/(//' | sed 's/)//')
 #  readonly SECONDARY_NODE_IP=$(ping "${VM_METADATA[sap_secondary_instance]}" -c 1 | head -1 | awk  '{ print $3 }' | sed 's/(//' | sed 's/)//')
   echo "${PRIMARY_NODE_IP} line 1384"
   echo "${SECONDARY_NODE_IP} line 1385"
+  echo "${PRIMARY_NODE_IP} aigprdhana1" >> /etc/hosts
+  echo "${SECONDARY_NODE_IP} aigprdhana2" >> /etc/hosts
   ## check required parameters are present
   echo "sap vip : ${VM_METADATA[sap_vip]} - primary-name: ${VM_METADATA[sap_primary_instance]}- primary ip : ${PRIMARY_NODE_IP}"
   echo "praimary zone: ${VM_METADATA[sap_primary_zone]}- secondary-name: ${VM_METADATA[sap_secondary_instance]}- SECONDARY ip : ${SECONDARY_NODE_IP}"
@@ -1397,6 +1398,7 @@ ha::check_settings() {
 
   mkdir -p /root/.deploy
 }
+
 
 
 ha::download_scripts() {
