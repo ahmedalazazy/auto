@@ -1379,17 +1379,21 @@ hdb::install_worker_sshkeys() {
 ha::check_settings() {
 
   # Set additional global constants
-  readonly PRIMARY_NODE_IP=$(ping "${VM_METADATA[sap_primary_instance]}" -c 1 | head -1 | awk  '{ print $3 }' | sed 's/(//' | sed 's/)//')
-  readonly SECONDARY_NODE_IP=$(ping "${VM_METADATA[sap_secondary_instance]}" -c 1 | head -1 | awk  '{ print $3 }' | sed 's/(//' | sed 's/)//')
+  sleep "60"
+
+  readonly PRIMARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigprdhana1)" --project=aig-sap-dev)
+  readonly SECONDARY_NODE_IP$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigprdhana1)" --project=aig-sap-dev)
+#  readonly PRIMARY_NODE_IP=$(ping "${VM_METADATA[sap_primary_instance]}" -c 1 | head -1 | awk  '{ print $3 }' | sed 's/(//' | sed 's/)//')
+#  readonly SECONDARY_NODE_IP=$(ping "${VM_METADATA[sap_secondary_instance]}" -c 1 | head -1 | awk  '{ print $3 }' | sed 's/(//' | sed 's/)//')
   echo "${PRIMARY_NODE_IP} line 1384"
   echo "${SECONDARY_NODE_IP} line 1385"
   ## check required parameters are present
-  echo "sap vip : ${VM_METADATA[sap_vip]} - primary-name: ${VM_METADATA[sap_primary_instance]}- primary ip :${PRIMARY_NODE_IP}"
-  echo "praimary zone: ${VM_METADATA[sap_primary_zone]}- secondary-name: ${VM_METADATA[sap_secondary_instance]}- SECONDARY ip :${SECONDARY_NODE_IP}"
- # if [ -z "${VM_METADATA[sap_vip]}" ] || [ -z "${VM_METADATA[sap_primary_instance]}" ] || [ -z "${PRIMARY_NODE_IP}" ] || [ -z "${VM_METADATA[sap_primary_zone]}" ] || [ -z "${VM_METADATA[sap_secondary_instance]}" ] || [ -z "${SECONDARY_NODE_IP}" ]; then
+  echo "sap vip : ${VM_METADATA[sap_vip]} - primary-name: ${VM_METADATA[sap_primary_instance]}- primary ip : ${PRIMARY_NODE_IP}"
+  echo "praimary zone: ${VM_METADATA[sap_primary_zone]}- secondary-name: ${VM_METADATA[sap_secondary_instance]}- SECONDARY ip : ${SECONDARY_NODE_IP}"
+  if [ -z "${VM_METADATA[sap_vip]}" ] || [ -z "${VM_METADATA[sap_primary_instance]}" ] || [ -z "${PRIMARY_NODE_IP}" ] || [ -z "${VM_METADATA[sap_primary_zone]}" ] || [ -z "${VM_METADATA[sap_secondary_instance]}" ] || [ -z "${SECONDARY_NODE_IP}" ]; then
   main::errhandle_log_warning "High Availability variables were missing or incomplete. Both SAP HANA VMs will be installed and configured but HA will need to be manually setup "
   main::complete
- # fi
+  fi
 
   mkdir -p /root/.deploy
 }
