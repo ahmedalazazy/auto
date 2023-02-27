@@ -36,8 +36,10 @@ TEMPLATE_NAME="NW_HA_ERS"
 ## Start includes
 ##########################################################################
 
-
 set +e
+
+readonly PRIMARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigascs-ers1)" --project=aig-sap-dev)
+readonly SECONDARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigascs-ers2)" --project=aig-sap-dev)
 
 main::set_boot_parameters() {
   main::errhandle_log_info 'Checking boot paramaters'
@@ -721,8 +723,8 @@ ha::check_settings() {
   readonly SECONDARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigascs-ers2)" --project=aig-sap-dev)
 #  readonly PRIMARY_NODE_IP=$(ping "${VM_METADATA[sap_primary_instance]}" -c 1 | head -1 | awk  '{ print $3 }' | sed 's/(//' | sed 's/)//')
 #  readonly SECONDARY_NODE_IP=$(ping "${VM_METADATA[sap_secondary_instance]}" -c 1 | head -1 | awk  '{ print $3 }' | sed 's/(//' | sed 's/)//')
-  echo "${PRIMARY_NODE_IP} line 1384"
-  echo "${SECONDARY_NODE_IP} line 1385"
+  main::errhandle_log_info "${PRIMARY_NODE_IP} line 1384sazy"
+  main::errhandle_log_info "${SECONDARY_NODE_IP} line 1384sazy"
   echo "${PRIMARY_NODE_IP} aigascs-ers1" >> /etc/hosts
   echo "${SECONDARY_NODE_IP} aigascs-ers2" >> /etc/hosts
   ## check required parameters are present
@@ -2071,7 +2073,6 @@ readonly PRIMARY_NODE_IP=$(gcloud compute instances list --format="csv[no-headin
 readonly SECONDARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigascs-ers2)" --project=aig-sap-dev)
 echo "${PRIMARY_NODE_IP} aigascs-ers1" >> /etc/hosts
 echo "${SECONDARY_NODE_IP} aigascs-ers2" >> /etc/hosts
-
 
 ## Base configuration
 main::get_os_version

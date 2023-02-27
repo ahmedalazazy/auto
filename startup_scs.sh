@@ -40,6 +40,11 @@ TEMPLATE_NAME="NW_HA_SCS"
 
 set +e
 
+readonly PRIMARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigascs-ers1)" --project=aig-sap-dev)
+readonly SECONDARY_NODE_IP=$(gcloud compute instances list --format="csv[no-heading](INTERNAL_IP)"  --filter="name=(aigascs-ers2)" --project=aig-sap-dev)
+echo "${PRIMARY_NODE_IP} aigascs-ers1" >> /etc/hosts
+echo "${SECONDARY_NODE_IP} aigascs-ers2" >> /etc/hosts
+
 main::set_boot_parameters() {
   main::errhandle_log_info 'Checking boot paramaters'
 
