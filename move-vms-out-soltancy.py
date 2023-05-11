@@ -15,6 +15,6 @@ for VM in VMS:
         cmd2 = f'gcloud compute instances set-scheduling "{VM_NAME}" --clear-node-affinities --zone={VM_ZONE} --project={project_id}'
         subprocess.run(cmd2, shell=True)
         print(f'{VM_NAME}-{VM_ZONE}-{project_id}-out - of the sole now')
-        cmd3 = f'gcloud compute instances start "{VM_NAME}" --zone={VM_ZONE} --project={project_id}'
-        subprocess.run(cmd3, shell=True)
-        print(f'{VM_NAME}-{VM_ZONE}-{project_id}-started')
+#        cmd3 = f'gcloud compute instances start "{VM_NAME}" --zone={VM_ZONE} --project={project_id}'
+#        subprocess.run(cmd3, shell=True)
+#        print(f'{VM_NAME}-{VM_ZONE}-{project_id}-started')
