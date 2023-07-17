@@ -159,21 +159,29 @@ function php() {
                 echo "Installing PHP version 8.1 on CentOS 8 or Red Hat 8"
                 # Add commands to install PHP version 8.1 on CentOS 8 or Red Hat 8
                 sudo dnf update -y
+                echo "update"
                 sudo dnf install -y epel-release
+                echo "install epel-release"
                 sudo dnf install -y dnf-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm
+                echo "install remi for pho"
                 sudo dnf module reset php -y
+                echo "reset PHP"
                 sudo dnf module enable php:remi-8.1 -y
+                echo "enable PHP"
                 sudo dnf install -y php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc php-pgsql
+                echo "install PHP"
                 php --version
+                echo "PHP version is $(php --version)."
                 echo "PHP 8.1 installed successfully."
                 sudo cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bak
-
+                echo "take a backup from php-fpm.d/www.conf"
                 # Replace the user and group values with 'nginx' in the www.conf file
                 sudo sed -i 's/^user = .*/user = nginx/' /etc/php-fpm.d/www.conf
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
-
+                echo "change user and group on FPM configration file"
                 # Restart PHP-FPM service for changes to take effect
                 sudo systemctl enable php-fpm.service
+                echo "restart PHP-FPM service for changes to take effect"
                 sudo systemctl restart php-fpm
                 echo "$PHP_NAME"
                 echo "$PHP_NAME OS (2 or 4) option selected 3 end."
