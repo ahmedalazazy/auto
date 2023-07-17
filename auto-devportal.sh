@@ -373,9 +373,9 @@ function nginxconfigration() {
 # Function to configure PostgreSQL for remote access
 function configure_postgresql() {
 
-    local PG_VERSION=$PG_VERSION
-    local PG_CONF="/etc/postgresql/${PG_VERSION}/main/postgresql.conf"
-    local PG_HBA="/etc/postgresql/${PG_VERSION}/main/pg_hba.conf"
+    local PGV=$PGV
+    local PG_CONF="/etc/postgresql/${PGV}/main/postgresql.conf"
+    local PG_HBA="/etc/postgresql/${PGV}/main/pg_hba.conf"
     echo "$PG_CONF"
     echo "$PG_HBA"
     echo "PG_VERSION"
@@ -570,9 +570,27 @@ function installDB() {
             read -p "Please enter the PostgreSQL version number: " PG_VERSION
             sleep 5
             local PG_VERSION=$PG_VERSION
-            case "$PG_VERSION" in
+            if [ "$PG_VERSION" == 1 ]; then
+                PGV="12"
+                local PGV="$PGV"
+            elif [ "$PG_VERSION" == 2 ]; then
+                PGV="13"
+                local PGV="$PGV"
+            elif [ "$PG_VERSION" == 3 ]; then
+                PGV="14"
+                local PGV="$PGV"
+            elif [ "$PG_VERSION" == 4 ]; then
+                PGV="15"
+                local PGV="$PGV"
+            else
+                echo "Invalid PostgreSQL version selection."
+                return 1
+            fi
 
+
+            case "$PG_VERSION" in
                 1)  
+
                     if [ "$OS_VERSION" == 1 ] || [ "$OS_VERSION" == 3 ]; then
                         echo "You have selected CentOS 7 or Red Hat 7."
                         echo "Installing Postgres version 12"
