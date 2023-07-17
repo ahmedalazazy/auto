@@ -170,8 +170,7 @@ function php() {
                 echo "enable PHP"
                 sudo dnf install -y php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc php-pgsql
                 echo "install PHP"
-                php --version
-                echo "PHP version is $(php --version)."
+                echo "PHP version is $(sudo php --version)."
                 echo "PHP 8.1 installed successfully."
                 sudo cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bak
                 echo "take a backup from php-fpm.d/www.conf"
