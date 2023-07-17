@@ -372,6 +372,7 @@ function nginxconfigration() {
 
 # Function to configure PostgreSQL for remote access
 function configure_postgresql() {
+
     local PG_VERSION=$(pg_config --version | awk '{print $NF}')
     local PG_CONF="/etc/postgresql/${PG_VERSION}/main/postgresql.conf"
     local PG_HBA="/etc/postgresql/${PG_VERSION}/main/pg_hba.conf"
@@ -556,7 +557,7 @@ function installDB() {
         echo "Installing PostgreSQL..."
         # Add installation commands for PostgreSQL
         # Your PostgreSQL installation commands here
-             echo ""
+            echo ""
             echo "Select the PostgreSQL Version:"
             echo "1) PostgreSQL 12"
             echo "2) PostgreSQL 13"
@@ -571,7 +572,7 @@ function installDB() {
                         echo "You have selected CentOS 7 or Red Hat 7."
                         echo "Installing Postgres version 12"
                         sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-                        sudo yum install -y postgresql12-server
+                        sudo yum install -y postgresql12-server postgresql12-devel
                         sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
                         sudo systemctl enable postgresql-12
                         sudo systemctl start postgresql-12
@@ -583,7 +584,7 @@ function installDB() {
                         echo "Installing Postgres version 12"
                         sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
                         sudo dnf -qy module disable postgresql
-                        sudo dnf install -y postgresql12-server
+                        sudo dnf install -y postgresql12-server postgresql12-devel
                         sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
                         sudo systemctl enable postgresql-12
                         sudo systemctl start postgresql-12
@@ -599,7 +600,7 @@ function installDB() {
                         echo "You have selected CentOS 7 or Red Hat 7."
                         echo "Installing Postgres version 13"
                         sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-                        sudo yum install -y postgresql13-server
+                        sudo yum install -y postgresql13-server postgresql13-devel
                         sudo /usr/pgsql-13/bin/postgresql-13-setup initdb
                         sudo systemctl enable postgresql-13
                         sudo systemctl start postgresql-13
@@ -612,7 +613,7 @@ function installDB() {
                         echo "Installing Postgres version 13"
                         sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
                         sudo dnf -qy module disable postgresql
-                        sudo dnf install -y postgresql13-server
+                        sudo dnf install -y postgresql13-server postgresql13-devel
                         sudo /usr/pgsql-13/bin/postgresql-13-setup initdb
                         sudo systemctl enable postgresql-13
                         sudo systemctl start postgresql-13
@@ -630,7 +631,7 @@ function installDB() {
                         echo "You have selected CentOS 7 or Red Hat 7."
                         echo "Installing Postgres version 14"
                         sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-                        sudo yum install -y postgresql14-server
+                        sudo yum install -y postgresql14-server postgresql14-devel
                         sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
                         sudo systemctl enable postgresql-14
                         sudo systemctl start postgresql-14
@@ -642,7 +643,7 @@ function installDB() {
                         echo "Installing Postgres version 14"
                         sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
                         sudo dnf -qy module disable postgresql
-                        sudo dnf install -y postgresql14-server
+                        sudo dnf install -y postgresql14-server postgresql14-devel
                         sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
                         sudo systemctl enable postgresql-14
                         sudo systemctl start postgresql-14
@@ -658,7 +659,7 @@ function installDB() {
                         echo "You have selected CentOS 7 or Red Hat 7."
                         echo "Installing Postgres version 15"
                         sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-                        sudo yum install -y postgresql15-server
+                        sudo yum install -y postgresql15-server postgresql15-devel
                         sudo /usr/pgsql-15/bin/postgresql-15-setup initdb
                         sudo systemctl enable postgresql-15
                         sudo systemctl start postgresql-15
@@ -670,7 +671,7 @@ function installDB() {
                         echo "Installing Postgres version 15"
                         sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
                         sudo dnf -qy module disable postgresql
-                        sudo dnf install -y postgresql15-server
+                        sudo dnf install -y postgresql15-server postgresql15-devel
                         sudo /usr/pgsql-15/bin/postgresql-15-setup initdb
                         sudo systemctl enable postgresql-15
                         sudo systemctl start postgresql-15
