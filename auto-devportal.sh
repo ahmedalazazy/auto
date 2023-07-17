@@ -867,7 +867,7 @@ case "$InstallationNumber" in
         echo "Select the database type:"
         #add function for php and drupal and firwall
         Select_the_OS_Version
-        php(OS_VERSION)
+        php
         installDevPortal
         nginxconfigration
         sleep 5
