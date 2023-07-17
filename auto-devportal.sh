@@ -43,10 +43,10 @@ function php() {
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
 
                 # Restart PHP-FPM service for changes to take effect
-                systemctl enable php-fpm.service
+                sudo systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
-               echo "$PHP_NAME"
-               echo "$PHP_NAME option selected 1 is end ."
+                echo "$PHP_NAME"
+                echo "$PHP_NAME option selected 1 is end ."
             elif [ "$OS_VERSION" == 2 ] || [ "$OS_VERSION" == 4 ]; then
                 PHP_NAME="PHP 7.4"
                 echo "$PHP_NAME"
@@ -61,8 +61,6 @@ function php() {
                 sudo dnf module enable php:remi-7.4 -y
                 sudo dnf install -y php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc php-pgsql -y
                 php --version
-                systemctl enable php-fpm.service
-                sudo systemctl restart php-fpm
                 echo "PHP 7.4 installed successfully."
                 sudo cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bak
 
@@ -71,18 +69,15 @@ function php() {
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
 
                 # Restart PHP-FPM service for changes to take effect
-                systemctl enable php-fpm.service
+                sudo systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
-
-               echo "$PHP_NAME"
-               echo "$PHP_NAME option selected 1 is end ."
+                echo "$PHP_NAME"
+                echo "$PHP_NAME option selected 1 is end ."
             fi
 
             ;;
 
         2)
-            PHP_NAME="PHP 8.0"
-            echo "$PHP_NAME"
 
             if [ "$OS_VERSION" == 1 ] || [ "$OS_VERSION" == 3 ]; then
                 echo "$PHP_NAME"
@@ -100,7 +95,7 @@ function php() {
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
 
                 # Restart PHP-FPM service for changes to take effect
-                systemctl enable php-fpm.service
+                sudo systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
                 echo "$PHP_NAME"
                 echo "$PHP_NAME OS (1 or 3) option selected 2 end."
@@ -118,8 +113,6 @@ function php() {
                 sudo dnf module enable php:remi-8.0 -y
                 sudo dnf install -y php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc php-pgsql
                 php --version
-                systemctl enable php-fpm.service
-                sudo systemctl restart php-fpm
                 echo "PHP 8.0 installed successfully."
                 sudo cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bak
 
@@ -128,16 +121,13 @@ function php() {
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
 
                 # Restart PHP-FPM service for changes to take effect
-                systemctl enable php-fpm.service
+                sudo systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
                 echo "$PHP_NAME"
                 echo "$PHP_NAME OS (2 or 4) option selected 2 end."
             fi
-
             ;;
         3)
-            PHP_NAME="PHP 8.1"
-            echo "$PHP_NAME"
             if [ "$OS_VERSION" == 1 ] || [ "$OS_VERSION" == 3 ]; then
                 echo "$PHP_NAME"
                 echo "$PHP_NAME OS (1 or 3) option selected 3 start."
@@ -156,7 +146,7 @@ function php() {
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
 
                 # Restart PHP-FPM service for changes to take effect
-                systemctl enable php-fpm.service
+                sudo systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
                 echo "$PHP_NAME"
                 echo "$PHP_NAME OS (1 or 3) option selected 3 end."
@@ -171,12 +161,10 @@ function php() {
                 sudo dnf update -y
                 sudo dnf install -y epel-release
                 sudo dnf install -y dnf-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm
-                sudo dnf module reset php
+                sudo dnf module reset php -y
                 sudo dnf module enable php:remi-8.1 -y
                 sudo dnf install -y php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc php-pgsql
                 php --version
-                systemctl enable php-fpm.service
-                sudo systemctl restart php-fpm
                 echo "PHP 8.1 installed successfully."
                 sudo cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bak
 
@@ -185,7 +173,7 @@ function php() {
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
 
                 # Restart PHP-FPM service for changes to take effect
-                systemctl enable php-fpm.service
+                sudo systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
                 echo "$PHP_NAME"
                 echo "$PHP_NAME OS (2 or 4) option selected 3 end."
@@ -336,13 +324,13 @@ function firwall() {
     echo "Installing $firewall..."
     # Add installation commands for the Firewall
     # Your Firewall installation commands here
-    systemctl start firewalld
-    systemctl status firewalld
+    sudo systemctl start firewalld
+    sudo systemctl status firewalld
     firewall-cmd --list-services
     firewall-cmd --add-service={http,https,ssh,postgresql,mysql} --permanent
     firewall-cmd --reload
     firewall-cmd --list-all
-    if systemctl status firewalld | grep -q "running" ; then
+    if sudo systemctl status firewalld | grep -q "running" ; then
         echo "11- install firwall and run service running"
     else
         echo "11- install firwall and run service have an issue please stop script and cheeck"
@@ -354,9 +342,9 @@ function firwall() {
 function nginxconfigration() {
     local nginx="Nginx"
     yum install nginx -y
-    systemctl start nginx.service
-    systemctl enable nginx.service
-    if systemctl status nginx.service | grep -q "running" ; then
+    sudo systemctl start nginx.service
+    sudo systemctl enable nginx.service
+    if sudo systemctl status nginx.service | grep -q "running" ; then
         echo "9- install nginx and run service running"
     else
         echo "9- install nginx and run service have an issue please stop script and cheeck"
@@ -364,8 +352,8 @@ function nginxconfigration() {
     fi
     curl https://raw.githubusercontent.com/ahmedalazazy/auto/main/nginxconfigration -o /etc/nginx/conf.d/drupal-nginx.conf
     echo "12-create NGINX configration file done"
-    systemctl restart nginx.service
-    NGNGNGSTATUS=$(systemctl status nginx.service )
+    sudo systemctl restart nginx.service
+    NGNGNGSTATUS=$(sudo systemctl status nginx.service )
     if echo "$NGNGNGSTATUS" | grep -q "running" ; then
         echo "14- nginx up and run service running"
 
