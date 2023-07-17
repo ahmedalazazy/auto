@@ -858,18 +858,26 @@ case "$InstallationNumber" in
         #add function for DB and php and drupal and firwall
         Select_the_OS_Version
         php
+        unset -f php
         installDB
+        unset -f installDB
         installDevPortal
+        unset -f installDevPortal
         nginxconfigration
+        unset -f nginxconfigration
         firwall
+        unset -f firwall
         ;;
     2)
         echo "Select the database type:"
         #add function for php and drupal and firwall
         Select_the_OS_Version
         php
+        unset -f php
         installDevPortal
+        unset -f installDevPortal
         nginxconfigration
+        unset -f nginxconfigration
         sleep 5
         ;;
     3)
@@ -877,6 +885,7 @@ case "$InstallationNumber" in
         #add function for DB
         Select_the_OS_Version
         installDB
+        unset -f installDB
         sleep 5
         ;;
 
