@@ -14,7 +14,7 @@ echo -e "                            Github: $GREEN ahmedalazazy"
 echo -e "$GREEN****************************************************************************************$RESET"
 
 
-function php() {
+function php(OS_VERSION) {
     echo ""
     echo "Select the PHP Version:"
     echo "1) PHP 7.4"
@@ -196,7 +196,7 @@ function php() {
 }
 
 ##################################################################################
-function installDevPortal() {
+function installDevPortal(OS_VERSION ) {
         
     echo ""
     echo "Select the Drupal Version:"
@@ -856,17 +856,17 @@ case "$InstallationNumber" in
     1)
         #add function for DB and php and drupal and firwall
         Select_the_OS_Version
-        php
+        php(OS_VERSION)
+        installDB
         installDevPortal
         nginxconfigration
         firwall
-        installDB
         ;;
     2)
         echo "Select the database type:"
         #add function for php and drupal and firwall
         Select_the_OS_Version
-        php
+        php(OS_VERSION)
         installDevPortal
         nginxconfigration
         sleep 5
