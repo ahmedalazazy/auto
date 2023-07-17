@@ -26,6 +26,8 @@ function php() {
     case "$PHP_VERSION" in
         1)
             if [ "$OS_VERSION" == 1 ] || [ "$OS_VERSION" == 3 ]; then
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (1 or 3) option selected 1."
                 echo "You have selected CentOS 7 or Red Hat 7 and PHP 7.4."
                 echo "Installing PHP version 7.4 on CentOS 7 or Red Hat 7"
                 # Add commands to install PHP version 7.4 on CentOS 7 or Red Hat 7
@@ -43,9 +45,12 @@ function php() {
                 # Restart PHP-FPM service for changes to take effect
                 systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
-
+               echo "$PHP_NAME"
+               echo "$PHP_NAME option selected 1 is end ."
             elif [ "$OS_VERSION" == 2 ] || [ "$OS_VERSION" == 4 ]; then
                 PHP_NAME="PHP 7.4"
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (2 or 4) option selected 1."
                 echo "You have selected CentOS 8 or Red Hat 8 and PHP 7.4."
                 echo "Installing PHP version 7.4 on CentOS 8 or Red Hat 8"
                 # Add commands to install PHP version 7.4 on CentOS 8 or Red Hat 8
@@ -68,13 +73,20 @@ function php() {
                 # Restart PHP-FPM service for changes to take effect
                 systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
+
+               echo "$PHP_NAME"
+               echo "$PHP_NAME option selected 1 is end ."
             fi
 
             ;;
 
         2)
             PHP_NAME="PHP 8.0"
+            echo "$PHP_NAME"
+
             if [ "$OS_VERSION" == 1 ] || [ "$OS_VERSION" == 3 ]; then
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (1 or 3) option selected 2."
                 echo "You have selected CentOS 7 or Red Hat 7 and PHP 8.0."
                 echo "Installing PHP version 8.0 on CentOS 7 or Red Hat 7"
                 # Add commands to install PHP version 8.0 on CentOS 7 or Red Hat 7
@@ -90,8 +102,12 @@ function php() {
                 # Restart PHP-FPM service for changes to take effect
                 systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (1 or 3) option selected 2 end."
             elif [ "$OS_VERSION" == 2 ] || [ "$OS_VERSION" == 4 ]; then
                 PHP_NAME="PHP 8.0"
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (2 or 4) option selected 2 start."
                 echo "You have selected CentOS 8 or Red Hat 8 and PHP 8.0."
                 echo "Installing PHP version 8.0 on CentOS 8 or Red Hat 8"
                 # Add commands to install PHP version 8.0 on CentOS 8 or Red Hat 8
@@ -114,13 +130,17 @@ function php() {
                 # Restart PHP-FPM service for changes to take effect
                 systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
-
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (2 or 4) option selected 2 end."
             fi
 
             ;;
         3)
             PHP_NAME="PHP 8.1"
+            echo "$PHP_NAME"
             if [ "$OS_VERSION" == 1 ] || [ "$OS_VERSION" == 3 ]; then
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (1 or 3) option selected 3 start."
                 echo "You have selected CentOS 7 or Red Hat 7 and PHP 8.1."
                 echo "Installing PHP version 8.1 on CentOS 7 or Red Hat 7"
                 # Add commands to install PHP version 8.1 on CentOS 7 or Red Hat 7
@@ -138,8 +158,13 @@ function php() {
                 # Restart PHP-FPM service for changes to take effect
                 systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (1 or 3) option selected 3 end."
             elif [ "$OS_VERSION" == 2 ] || [ "$OS_VERSION" == 4 ]; then
                 PHP_NAME="PHP 8.1"
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (2 or 4) option selected 3 start."
+
                 echo "You have selected CentOS 8 or Red Hat 8 and PHP 8.1."
                 echo "Installing PHP version 8.1 on CentOS 8 or Red Hat 8"
                 # Add commands to install PHP version 8.1 on CentOS 8 or Red Hat 8
@@ -162,6 +187,8 @@ function php() {
                 # Restart PHP-FPM service for changes to take effect
                 systemctl enable php-fpm.service
                 sudo systemctl restart php-fpm
+                echo "$PHP_NAME"
+                echo "$PHP_NAME OS (2 or 4) option selected 3 end."
 
             fi
             ;;
@@ -171,6 +198,8 @@ function php() {
             exit 1
             ;;
     esac
+    echo "Script execution finished."
+
 }
 
 ##################################################################################
