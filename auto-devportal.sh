@@ -945,6 +945,7 @@ echo "Please chose what you need to do: "
 echo "1) Install APigee DevPortal + DB" 
 echo "2) Install Apigee DevPortal"
 echo "3) Install DB"
+echo "4) Update installation"
 read -p "Please enter the Installation number: " InstallationNumber
 case "$InstallationNumber" in
 
@@ -981,6 +982,9 @@ case "$InstallationNumber" in
         installDB
         unset -f installDB
         sleep 5
+        ;;
+    4)
+        echo "coming soon:"
         ;;
 
     *)
