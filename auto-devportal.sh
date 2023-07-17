@@ -161,7 +161,7 @@ function php() {
                 sudo dnf install -y epel-release
                 echo "install epel-release"
                 sudo dnf install -y dnf-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm
-                echo "install remi for pho"
+                echo "install remi for php"
                 sudo dnf module reset php -y
                 echo "reset PHP"
                 sudo dnf module enable php:remi-8.1 -y
@@ -257,7 +257,7 @@ function installDevPortal() {
             ;;
 
         2)
-            DRUPAL_NAME="Drupal 8"
+            DRUPAL_NAME="Drupal 9"
             php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
             php composer-setup.php --install-dir=/usr/local/bin --filename=composer
             php -r "unlink('composer-setup.php');"
