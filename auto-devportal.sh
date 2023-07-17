@@ -427,7 +427,23 @@ function create_database_and_user_pg_mysql_mariadb() {
 
 ###################################################################################
 function installDB() {
-    local DBTYPE="$1"
+
+    echo ""
+    echo "Select the Database Type:"
+    echo "1) MySQL"
+    echo "2) PostgreSQL"
+    echo "3) MariaDB"
+    read -p "Please enter the database type number: " DB_TYPE_NUMBER
+    if [ "$DB_TYPE_NUMBER" == "1" ]; then
+        DBTYPE="MySQL"
+    elif [ "$DB_TYPE_NUMBER" == "2" ]; then
+        DBTYPE="PostgreSQL"
+    elif [ "$DB_TYPE_NUMBER" == "3" ]; then
+        DBTYPE="MariaDB"
+    else
+        echo "Invalid database type selection."
+        return 1
+    fi
 
     if [ "$DBTYPE" == "MySQL" ]; then
         echo "Installing MySQL..."
@@ -890,9 +906,10 @@ case "$InstallationNumber" in
         ;;
 
     *)
-        echo "Invalid database type selection."
+        echo "Invalid chose selection."
         exit 1
         ;;
+        
 esac
 
 echo ""
