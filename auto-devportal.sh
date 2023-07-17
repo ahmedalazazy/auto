@@ -373,9 +373,13 @@ function nginxconfigration() {
 # Function to configure PostgreSQL for remote access
 function configure_postgresql() {
 
-    local PG_VERSION=$(pg_config --version | awk '{print $NF}')
+    local PG_VERSION=$PG_VERSION
     local PG_CONF="/etc/postgresql/${PG_VERSION}/main/postgresql.conf"
     local PG_HBA="/etc/postgresql/${PG_VERSION}/main/pg_hba.conf"
+    echo "$PG_CONF"
+    echo "$PG_HBA"
+    echo "PG_VERSION"
+    sudo chown -R postgres:postgres /etc/postgresql
 
     # Enable listening on all interfaces in postgresql.conf
     sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" "$PG_CONF"
@@ -565,6 +569,7 @@ function installDB() {
             echo "4) PostgreSQL 15"
             read -p "Please enter the PostgreSQL version number: " PG_VERSION
             sleep 5
+            local PG_VERSION=$PG_VERSION
             case "$PG_VERSION" in
 
                 1)  
@@ -575,7 +580,7 @@ function installDB() {
                         sudo yum install -y postgresql12-server postgresql12-devel
                         sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
                         sudo systemctl enable postgresql-12
-                        sudo systemctl start postgresql-12
+                        sudo systemctl restart postgresql-12
                         configure_postgresql
                         create_database_and_user_pg
                     elif [ "$OS_VERSION" == 2 ] || [ "$OS_VERSION" == 4 ]; then
@@ -587,7 +592,7 @@ function installDB() {
                         sudo dnf install -y postgresql12-server postgresql12-devel
                         sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
                         sudo systemctl enable postgresql-12
-                        sudo systemctl start postgresql-12
+                        sudo systemctl restart postgresql-12
                         configure_postgresql
                         create_database_and_user_pg
                     else
@@ -603,7 +608,7 @@ function installDB() {
                         sudo yum install -y postgresql13-server postgresql13-devel
                         sudo /usr/pgsql-13/bin/postgresql-13-setup initdb
                         sudo systemctl enable postgresql-13
-                        sudo systemctl start postgresql-13
+                        sudo systemctl restart postgresql-13
                         configure_postgresql
                         create_database_and_user_pg
 
@@ -616,7 +621,7 @@ function installDB() {
                         sudo dnf install -y postgresql13-server postgresql13-devel
                         sudo /usr/pgsql-13/bin/postgresql-13-setup initdb
                         sudo systemctl enable postgresql-13
-                        sudo systemctl start postgresql-13
+                        sudo systemctl restart postgresql-13
                         configure_postgresql
                         create_database_and_user_pg
                     else
@@ -634,7 +639,7 @@ function installDB() {
                         sudo yum install -y postgresql14-server postgresql14-devel
                         sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
                         sudo systemctl enable postgresql-14
-                        sudo systemctl start postgresql-14
+                        sudo systemctl restart postgresql-14
                         configure_postgresql
                         create_database_and_user_pg
                     elif [ "$OS_VERSION" == 2 ] || [ "$OS_VERSION" == 4 ]; then
@@ -646,7 +651,7 @@ function installDB() {
                         sudo dnf install -y postgresql14-server postgresql14-devel
                         sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
                         sudo systemctl enable postgresql-14
-                        sudo systemctl start postgresql-14
+                        sudo systemctl restart postgresql-14
                         configure_postgresql
                         create_database_and_user_pg
                     else
@@ -662,7 +667,7 @@ function installDB() {
                         sudo yum install -y postgresql15-server postgresql15-devel
                         sudo /usr/pgsql-15/bin/postgresql-15-setup initdb
                         sudo systemctl enable postgresql-15
-                        sudo systemctl start postgresql-15
+                        sudo systemctl restart postgresql-15
                         configure_postgresql
                         create_database_and_user_pg
                     elif [ "$OS_VERSION" == 2 ] || [ "$OS_VERSION" == 4 ]; then
@@ -674,7 +679,7 @@ function installDB() {
                         sudo dnf install -y postgresql15-server postgresql15-devel
                         sudo /usr/pgsql-15/bin/postgresql-15-setup initdb
                         sudo systemctl enable postgresql-15
-                        sudo systemctl start postgresql-15
+                        sudo systemctl restart postgresql-15
                         configure_postgresql
                         create_database_and_user_pg
                     else
