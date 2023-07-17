@@ -42,6 +42,9 @@ function php() {
                 # Replace the user and group values with 'nginx' in the www.conf file
                 sudo sed -i 's/^user = .*/user = nginx/' /etc/php-fpm.d/www.conf
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
+                sudo sed -i 's/^listen = .*/listen = 127.0.0.1:9000/' /etc/php-fpm.d/www.conf
+
+
 
                 # Restart PHP-FPM service for changes to take effect
                 sudo systemctl enable php-fpm.service
@@ -67,6 +70,8 @@ function php() {
                 # Replace the user and group values with 'nginx' in the www.conf file
                 sudo sed -i 's/^user = .*/user = nginx/' /etc/php-fpm.d/www.conf
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
+                sudo sed -i 's/^listen = .*/listen = 127.0.0.1:9000/' /etc/php-fpm.d/www.conf
+
 
                 # Restart PHP-FPM service for changes to take effect
                 sudo systemctl enable php-fpm.service
@@ -93,6 +98,8 @@ function php() {
                 # Replace the user and group values with 'nginx' in the www.conf file
                 sudo sed -i 's/^user = .*/user = nginx/' /etc/php-fpm.d/www.conf
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
+                sudo sed -i 's/^listen = .*/listen = 127.0.0.1:9000/' /etc/php-fpm.d/www.conf
+
 
                 # Restart PHP-FPM service for changes to take effect
                 sudo systemctl enable php-fpm.service
@@ -118,6 +125,8 @@ function php() {
                 # Replace the user and group values with 'nginx' in the www.conf file
                 sudo sed -i 's/^user = .*/user = nginx/' /etc/php-fpm.d/www.conf
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
+                sudo sed -i 's/^listen = .*/listen = 127.0.0.1:9000/' /etc/php-fpm.d/www.conf
+
 
                 # Restart PHP-FPM service for changes to take effect
                 sudo systemctl enable php-fpm.service
@@ -143,6 +152,8 @@ function php() {
                 # Replace the user and group values with 'nginx' in the www.conf file
                 sudo sed -i 's/^user = .*/user = nginx/' /etc/php-fpm.d/www.conf
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
+                sudo sed -i 's/^listen = .*/listen = 127.0.0.1:9000/' /etc/php-fpm.d/www.conf
+
 
                 # Restart PHP-FPM service for changes to take effect
                 sudo systemctl enable php-fpm.service
@@ -176,6 +187,8 @@ function php() {
                 # Replace the user and group values with 'nginx' in the www.conf file
                 sudo sed -i 's/^user = .*/user = nginx/' /etc/php-fpm.d/www.conf
                 sudo sed -i 's/^group = .*/group = nginx/' /etc/php-fpm.d/www.conf
+                sudo sed -i 's/^listen = .*/listen = 127.0.0.1:9000/' /etc/php-fpm.d/www.conf
+
                 echo "change user and group on FPM configration file"
                 # Restart PHP-FPM service for changes to take effect
                 sudo systemctl enable php-fpm.service
