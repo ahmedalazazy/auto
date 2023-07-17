@@ -14,7 +14,7 @@ echo -e "                            Github: $GREEN ahmedalazazy"
 echo -e "$GREEN****************************************************************************************$RESET"
 
 
-function php(OS_VERSION) {
+function php() {
     echo ""
     echo "Select the PHP Version:"
     echo "1) PHP 7.4"
