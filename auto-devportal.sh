@@ -851,27 +851,27 @@ case "$InstallationNumber" in
 
     1)
         #add function for DB and php and drupal and firwall
-        Select_the_OS_Version()
-        php()
-        nginxconfigration()
-        installDevPortal()
-        firwall()
-        installDB()
+        Select_the_OS_Version
+        php
+        nginxconfigration
+        installDevPortal
+        firwall
+        installDB
         ;;
     2)
         echo "Select the database type:"
         #add function for php and drupal and firwall
-        Select_the_OS_Version()
-        php()
-        nginxconfigration()
-        installDevPortal()
+        Select_the_OS_Version
+        php
+        nginxconfigration
+        installDevPortal
         sleep 5
         ;;
     3)
         echo "Select the database type:"
-        #add function for DB()
-        Select_the_OS_Version()
-        installDB()
+        #add function for DB
+        Select_the_OS_Version
+        installDB
         sleep 5
         ;;
 
