@@ -779,53 +779,50 @@ function installDB() {
 
 
 
+function Select_the_OS_Version(){
+    echo "Select the OS Version:"
+    echo "1) CentOS 7"
+    echo "2) CentOS 8"
+    echo "3) Red Hat 7"
+    echo "4) Red Hat 8"
+    read -p "Please enter the OS version number: " OS_VERSION
+    sleep 2
 
+    echo "Preparing OS"
 
+    case "$OS_VERSION" in
+        1 | 3)
+            # Add your commands specific to CentOS 7 or Red Hat 7 here
+            echo "You have selected CentOS 7 or Red Hat 7."
+            OS_NAME="CentOS 7 / Red Hat 7"
+            sudo yum update -y
+            sudo yum install -y epel-release
+            sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+            sudo yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+            sudo yum update -y
+            sudo yum install -y yum-utils git zip unzip wget htop vim nano git curl bash net-tools tree yum-utils firewalld gzip bind-utils -y
+            ;;
 
+        2 | 4)
+            # Add your commands specific to CentOS 8 or Red Hat 8 here
+            echo "You have selected CentOS 8 or Red Hat 8."
+            OS_NAME="CentOS 8 / Red Hat 8"
+            sudo dnf update -y
+            sudo dnf install -y epel-release
+            sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+            sudo dnf install -y http://rpms.remirepo.net/enterprise/remi-release-8.rpm
+            sudo dnf update -y
+            sudo dnf install -y yum-utils git zip unzip wget htop vim nano git curl bash net-tools tree yum-utils firewalld gzip bind-utils -y
+            ;;
 
+        *)
+            echo "Invalid OS version selection."
+            exit 1
+            ;;
 
+    esac
 
-echo "Select the OS Version:"
-echo "1) CentOS 7"
-echo "2) CentOS 8"
-echo "3) Red Hat 7"
-echo "4) Red Hat 8"
-read -p "Please enter the OS version number: " OS_VERSION
-sleep 2
-
-echo "Preparing OS"
-
-case "$OS_VERSION" in
-    1 | 3)
-        # Add your commands specific to CentOS 7 or Red Hat 7 here
-        echo "You have selected CentOS 7 or Red Hat 7."
-        OS_NAME="CentOS 7 / Red Hat 7"
-        sudo yum update -y
-        sudo yum install -y epel-release
-        sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-        sudo yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-        sudo yum update -y
-        sudo yum install -y yum-utils git zip unzip wget htop vim nano git curl bash net-tools tree yum-utils firewalld gzip bind-utils -y
-        ;;
-
-    2 | 4)
-        # Add your commands specific to CentOS 8 or Red Hat 8 here
-        echo "You have selected CentOS 8 or Red Hat 8."
-        OS_NAME="CentOS 8 / Red Hat 8"
-        sudo dnf update -y
-        sudo dnf install -y epel-release
-        sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-        sudo dnf install -y http://rpms.remirepo.net/enterprise/remi-release-8.rpm
-        sudo dnf update -y
-        sudo dnf install -y yum-utils git zip unzip wget htop vim nano git curl bash net-tools tree yum-utils firewalld gzip bind-utils -y
-        ;;
-
-    *)
-        echo "Invalid OS version selection."
-        exit 1
-        ;;
-
-esac
+}
 
 
 echo "Please chose what you need to do: "
@@ -837,6 +834,7 @@ case "$InstallationNumber" in
 
     1)
         #add function for DB and php and drupal and firwall
+        Select_the_OS_Version
         php
         nginxconfigration
         installDevPortal
@@ -846,6 +844,7 @@ case "$InstallationNumber" in
     2)
         echo "Select the database type:"
         #add function for php and drupal and firwall
+        Select_the_OS_Version
         php
         nginxconfigration
         installDevPortal
@@ -853,8 +852,8 @@ case "$InstallationNumber" in
         ;;
     3)
         echo "Select the database type:"
-         #add function for DB
-
+        #add function for DB
+        Select_the_OS_Version
         installDB
         sleep 5
         ;;
