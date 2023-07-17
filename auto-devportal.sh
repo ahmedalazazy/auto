@@ -60,7 +60,6 @@ function php() {
                 sudo dnf module reset php
                 sudo dnf module enable php:remi-7.4 -y
                 sudo dnf install -y php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc php-pgsql -y
-                php --version
                 echo "PHP 7.4 installed successfully."
                 sudo cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bak
 
@@ -112,7 +111,6 @@ function php() {
                 sudo dnf module reset php
                 sudo dnf module enable php:remi-8.0 -y
                 sudo dnf install -y php php-bcmath php-common php-cli php-fpm php-gd php-json php-mbstring php-mysqlnd php-opcache php-pdo php-process php-xml php-xmlrpc php-pgsql
-                php --version
                 echo "PHP 8.0 installed successfully."
                 sudo cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bak
 
@@ -358,7 +356,6 @@ function nginxconfigration() {
         exit
     fi
     curl https://raw.githubusercontent.com/ahmedalazazy/auto/main/nginxconfigration -o /etc/nginx/conf.d/drupal-nginx.conf
-    echo "12-create NGINX configration file done"
     sudo systemctl restart nginx.service
     NGNGNGSTATUS=$(sudo systemctl status nginx.service )
     if echo "$NGNGNGSTATUS" | grep -q "running" ; then
@@ -860,8 +857,8 @@ case "$InstallationNumber" in
         #add function for DB and php and drupal and firwall
         Select_the_OS_Version
         php
-        nginxconfigration
         installDevPortal
+        nginxconfigration
         firwall
         installDB
         ;;
@@ -870,8 +867,8 @@ case "$InstallationNumber" in
         #add function for php and drupal and firwall
         Select_the_OS_Version
         php
-        nginxconfigration
         installDevPortal
+        nginxconfigration
         sleep 5
         ;;
     3)
