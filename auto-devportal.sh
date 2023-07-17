@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #to run this script on VM
-#sudo -c 'curl https://raw.githubusercontent.com/ahmedalazazy/auto/main/auto-devportal.sh -o /tmp/auto-devportal.sh && chmod +x /tmp/auto-devportal.sh && bash /tmp/auto-devportal.sh'
+#sudo su - root -c 'curl https://raw.githubusercontent.com/ahmedalazazy/auto/main/auto-devportal.sh -o /tmp/auto-devportal.sh && chmod +x /tmp/auto-devportal.sh && bash /tmp/auto-devportal.sh'
 
 RED='\033[01;31m'
 RESET='\033[0m'
@@ -388,7 +388,7 @@ function create_database_and_user_pg() {
 
 function create_database_and_user_pg_mysql_mariadb() {
 
-    local MYSQL_VERSION=$(mysql --version | awk '{print $3}'
+    local MYSQL_VERSION=$(mysql --version | awk '{print $3}')
     read -p "Please type the DB root password you are created on the top: " ROOTPASSWORD;
     read -p "Please type the new DB name : " DB;
     read -p "Please type the new DB USER : " USER;
