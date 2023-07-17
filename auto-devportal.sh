@@ -851,8 +851,8 @@ case "$InstallationNumber" in
 
     1)
         #add function for DB and php and drupal and firwall
-        Select_the_OS_Version
-        php
+        Select_the_OS_Version(OS_VERSION)
+        php(PHP_VERSION)
         nginxconfigration
         installDevPortal
         firwall
