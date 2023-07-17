@@ -15,6 +15,7 @@ echo -e "$GREEN*****************************************************************
 
 
 function php() {
+
     echo ""
     echo "Select the PHP Version:"
     echo "1) PHP 7.4"
@@ -196,7 +197,7 @@ function php() {
 }
 
 ##################################################################################
-function installDevPortal(OS_VERSION ) {
+function installDevPortal() {
         
     echo ""
     echo "Select the Drupal Version:"
