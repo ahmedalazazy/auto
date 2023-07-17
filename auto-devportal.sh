@@ -400,13 +400,13 @@ function create_database_and_user_pg() {
     echo
 
     # Create the database
-    sudo -u postgres psql -c "CREATE DATABASE $DATABASE_NAME;"
+    sudo -u postgres psql -d "/var/lib/pgsql/${PGV}/data/" -c "CREATE DATABASE $DATABASE_NAME;"
 
     # Create the user and set the password
-    sudo -u postgres psql -c "CREATE USER $DATABASE_USER WITH PASSWORD '$DATABASE_PASSWORD';"
+    sudo -u postgres psql -d "/var/lib/pgsql/${PGV}/data/" -c "CREATE USER $DATABASE_USER WITH PASSWORD '$DATABASE_PASSWORD';"
 
     # Grant all privileges to the user on the database
-    sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DATABASE_NAME TO $DATABASE_USER;"
+    sudo -u postgres psql -d "/var/lib/pgsql/${PGV}/data/" -c "GRANT ALL PRIVILEGES ON DATABASE $DATABASE_NAME TO $DATABASE_USER;"
 
     echo "Database and user have been created and configured."
 }
