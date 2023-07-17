@@ -374,8 +374,8 @@ function nginxconfigration() {
 function configure_postgresql() {
 
     local PGV=$PGV
-    local PG_CONF="/etc/postgresql/${PGV}/main/postgresql.conf"
-    local PG_HBA="/etc/postgresql/${PGV}/main/pg_hba.conf"
+    local PG_CONF="/var/lib/pgsql/${PGV}/data/postgresql.conf"
+    local PG_HBA="/var/lib/pgsql/${PGV}/data/pg_hba.conf"
     echo "$PG_CONF"
     echo "$PG_HBA"
     echo "PG_VERSION"
@@ -849,7 +849,7 @@ function Select_the_OS_Version(){
     echo "4) Red Hat 8"
     read -p "Please enter the OS version number: " OS_VERSION
     sleep 2
-
+    local OS_VERSION=$OS_VERSION
     echo "Preparing OS"
 
     case "$OS_VERSION" in
