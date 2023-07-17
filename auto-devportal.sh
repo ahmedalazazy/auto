@@ -273,6 +273,25 @@ function installDevPortal() {
 
             PACKAGISTIP=$(dig packagist.org +short)
             echo "$PACKAGISTIP packagist.org" >>/etc/hosts
+            folder_path="/var/www/devportal"
+
+            if [ -d "$folder_path" ]; then
+                # If the folder exists, prompt for the action
+                read -p "Folder already exists. Do you want to (1) Delete or (2) Rename to .backup? (Enter 1 or 2): " action
+
+                if [ "$action" = "1" ]; then
+                    # Delete the folder if the user chooses option 1
+                    sudo rm -rf "$folder_path"
+                    echo "Folder deleted successfully."
+                elif [ "$action" = "2" ]; then
+                    # Rename the folder to .backup if the user chooses option 2
+                    sudo mv "$folder_path" "${folder_path}.backup"
+                    echo "Folder renamed to ${folder_path}.backup"
+                else
+                    echo "Invalid choice. No action taken."
+                fi
+            fi
+
 
             sudo su - devportal -c 'cd /var/www && echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile && source ~/.bash_profile && composer create-project apigee/devportal-kickstart-project:9.x-dev devportal --no-interaction && cd /var/www/devportal/web/sites/default && yes |cp default.settings.php settings.php && chmod 660 settings.php'
             cd /var/www/devportal/web/sites/default && chown -R devportal:nginx settings.php
@@ -290,6 +309,24 @@ function installDevPortal() {
             chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default
             chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/files 
             chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/settings.php
+            folder_path_2="/var/www/private"
+
+            if [ -d "$folder_path_2" ]; then
+                # If the folder exists, prompt for the action
+                read -p "Folder already exists. Do you want to (1) Delete or (2) Rename to .backup? (Enter 1 or 2): " action
+
+                if [ "$action" = "1" ]; then
+                    # Delete the folder if the user chooses option 1
+                    sudo rm -rf "$folder_path_2"
+                    echo "Folder deleted successfully."
+                elif [ "$action" = "2" ]; then
+                    # Rename the folder to .backup if the user chooses option 2
+                    sudo mv "$folder_path_2" "${folder_path_2}.backup"
+                    echo "Folder renamed to ${folder_path_2}.backup"
+                else
+                    echo "Invalid choice. No action taken."
+                fi
+            fi
 
             mkdir /var/www/private
             cd /var/www/private
@@ -358,41 +395,40 @@ function nginxconfigration() {
     sudo find /etc/nginx/conf.d/ -maxdepth 1 -type f -name "*.conf" -exec mv -n {} {}.bkp \;
     sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bkp
 
-sudo bash -c 'cat << EOF > /etc/nginx/nginx.conf
-user nginx;
-worker_processes auto;
-error_log /var/log/nginx/error.log;
-pid /run/nginx.pid;
+    sudo bash -c 'cat << EOF > /etc/nginx/nginx.conf
+    user nginx;
+    worker_processes auto;
+    error_log /var/log/nginx/error.log;
+    pid /run/nginx.pid;
 
-# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
-include /usr/share/nginx/modules/*.conf;
+    # Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+    include /usr/share/nginx/modules/*.conf;
 
-events {
-    worker_connections 1024;
-}
+    events {
+        worker_connections 1024;
+    }
 
-http {
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" '
-                      '"$http_user_agent" "$http_x_forwarded_for"';
+    http {
+        log_format  main  '\''$remote_addr - $remote_user [$time_local] "$request" '$status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"'\'';
 
-    access_log  /var/log/nginx/access.log  main;
+        access_log  /var/log/nginx/access.log  main;
 
-    sendfile            on;
-    tcp_nopush          on;
-    tcp_nodelay         on;
-    keepalive_timeout   65;
-    types_hash_max_size 2048;
+        sendfile            on;
+        tcp_nopush          on;
+        tcp_nodelay         on;
+        keepalive_timeout   65;
+        types_hash_max_size 2048;
 
-    include             /etc/nginx/mime.types;
-    default_type        application/octet-stream;
+        include             /etc/nginx/mime.types;
+        default_type        application/octet-stream;
 
-    # Load modular configuration files from the /etc/nginx/conf.d directory.
-    # See http://nginx.org/en/docs/ngx_core_module.html#include
-    # for more information.
-    include /etc/nginx/conf.d/*.conf;
-}
-EOF'
+        # Load modular configuration files from the /etc/nginx/conf.d directory.
+        # See http://nginx.org/en/docs/ngx_core_module.html#include
+        # for more information.
+        include /etc/nginx/conf.d/*.conf;
+    }
+    EOF'
+
 
 
     curl https://raw.githubusercontent.com/ahmedalazazy/auto/main/nginxconfigration -o /etc/nginx/conf.d/drupal-nginx.conf
@@ -597,7 +633,7 @@ function installDB() {
         esac
 
 
-####################################################################################
+
     elif [ "$DBTYPE" == "PG" ] || [ "$DBTYPE" == "PostgreSQL" ]; then
         echo "Installing PostgreSQL..."
         # Add installation commands for PostgreSQL
@@ -753,7 +789,7 @@ function installDB() {
             esac
 
 
-##############################################################################
+
     elif [ "$DBTYPE" == "MariaDB" ]; then
         echo "Installing MariaDB..."
         #Add installation commands for MariaDB
