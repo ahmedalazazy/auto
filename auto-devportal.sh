@@ -379,8 +379,7 @@ function configure_postgresql() {
     echo "$PG_CONF"
     echo "$PG_HBA"
     echo "PG_VERSION"
-    sudo chown -R postgres:postgres /etc/postgresql
-
+    sudo chown -R postgres:postgres /var/lib/pgsql/"${PGV}"/data/
     # Enable listening on all interfaces in postgresql.conf
     sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" "$PG_CONF"
 
@@ -658,6 +657,7 @@ function installDB() {
                         sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
                         sudo systemctl enable postgresql-14
                         sudo systemctl restart postgresql-14
+                        sudo systemctl status postgresql-14
                         configure_postgresql
                         create_database_and_user_pg
                     elif [ "$OS_VERSION" == 2 ] || [ "$OS_VERSION" == 4 ]; then
