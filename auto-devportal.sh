@@ -77,13 +77,40 @@ function update_devportal {
     cd "$dir/"
     sudo chown -R devportal:nginx "$dir/composer.json" "$dir/patches/" "$dir/web/modules/" "$dir/web/content/" "$dir/web/themes/" "$dir/web/translation/" "$dir/web/sites/default/sync/"
     sudo chmod -R 777 "$dir"
-    composer up
-    "$dir/vendor/drush/drush/drush" cim -y
-    "$dir/vendor/drush/drush/drush" cr
-    "$dir/vendor/drush/drush/drush" updb -y
-    "$dir/vendor/drush/drush/drush" locale:update -y
-    "$dir/vendor/drush/drush/drush" locale:import ar "$dir/web/translation/ar.po" --type=customized --override=all -y
-    "$dir/vendor/drush/drush/drush" cr
+    read -p "Do you want to run 'composer up'? (y/n): " run_composer_up
+    if [[ "$run_composer_up" == "y" || "$run_composer_up" == "Y" ]]; then
+        composer up
+    fi
+
+    read -p "Do you want to run 'drush cim'? (y/n): " run_drush_cim
+    if [[ "$run_drush_cim" == "y" || "$run_drush_cim" == "Y" ]]; then
+        "$dir/vendor/drush/drush/drush" cim -y
+    fi
+
+    read -p "Do you want to run 'drush cr'? (y/n): " run_drush_cr
+    if [[ "$run_drush_cr" == "y" || "$run_drush_cr" == "Y" ]]; then
+        "$dir/vendor/drush/drush/drush" cr
+    fi
+
+    read -p "Do you want to run 'drush updb'? (y/n): " run_drush_updb
+    if [[ "$run_drush_updb" == "y" || "$run_drush_updb" == "Y" ]]; then
+        "$dir/vendor/drush/drush/drush" updb -y
+    fi
+
+    read -p "Do you want to run 'drush locale:update'? (y/n): " run_drush_locale_update
+    if [[ "$run_drush_locale_update" == "y" || "$run_drush_locale_update" == "Y" ]]; then
+        "$dir/vendor/drush/drush/drush" locale:update -y
+    fi
+
+    read -p "Do you want to run 'drush locale:import ar'? (y/n): " run_drush_locale_import
+    if [[ "$run_drush_locale_import" == "y" || "$run_drush_locale_import" == "Y" ]]; then
+        "$dir/vendor/drush/drush/drush" locale:import ar "$dir/web/translation/ar.po" --type=customized --override=all -y
+    fi
+
+    read -p "Do you want to run 'drush cr' again? (y/n): " run_drush_cr_again
+    if [[ "$run_drush_cr_again" == "y" || "$run_drush_cr_again" == "Y" ]]; then
+        "$dir/vendor/drush/drush/drush" cr
+    fi
 }
 
 
