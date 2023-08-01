@@ -13,6 +13,81 @@ echo -e "This Script for Automate install Drupal DevPortal with Apigee Edge for 
 echo -e "                            Github: $GREEN ahmedalazazy"
 echo -e "$GREEN****************************************************************************************$RESET"
 
+function clone_repo() {
+    read -p "Username: " USERNAME
+    read -s -p "Password or Access Token: " PASSWORD
+    echo ""
+    read -p "Repository URL: " REPO_URL
+    read -p "Branch or Tag Name (default: main/master): " BRANCH_OR_TAG
+    BRANCH_OR_TAG=${BRANCH_OR_TAG:-main}
+    DESTINATION_DIR="/source"
+    if [ ! -d $DESTINATION_DIR ]
+	then
+	     mkdir $DESTINATION_DIR
+	else
+	     echo "Directory exists"
+	fi
+
+    # Clone the repository silently with authentication
+    git clone --quiet --depth 1 https://${USERNAME}:${PASSWORD}@${REPO_URL} --branch ${BRANCH_OR_TAG} ${DESTINATION_DIR}
+
+    # Verify if the clone was successful
+    if [ $? -eq 0 ]; then
+        echo "Cloned successfully!"
+    else
+        echo "Clone failed. Please check your credentials or repository URL."
+    fi
+    
+}
+
+
+
+function update_devportal {
+    read -p "Enter the source directory (e.g., /source/portal-code): " source_dir
+    read -p "Enter the devportal directory (e.g., /var/www/devportal): " dir
+
+    sudo rm -rf "$dir/composer.json"
+    echo "rm composer"
+    sudo rm -rf "$dir/patches/"
+    echo "rm patches"
+    sudo rm -rf "$dir/web/modules/"
+    echo "rm modules"
+    sudo rm -rf "$dir/web/content/"
+    echo "rm content"
+    sudo rm -rf "$dir/web/themes/"
+    echo "rm themes"
+    sudo rm -rf "$dir/web/translation/"
+    echo "rm translation"
+    sudo rm -rf "$dir/web/sites/default/sync/"
+    echo "rm sync"
+    sudo cp -R "$source_dir/portal/web/sites/default/sync/" "$dir/web/sites/default/"
+    echo "cp sync"
+    sudo cp -R "$source_dir/portal/web/modules/" "$dir/web/"
+    echo "cp modules"
+    sudo cp -R "$source_dir/portal/web/content/" "$dir/web/"
+    echo "cp content"
+    sudo cp -R "$source_dir/portal/web/themes/" "$dir/web/"
+    echo "cp themes"
+    sudo cp -R "$source_dir/portal/web/translation/" "$dir/web/"
+    echo "cp translation"
+    sudo cp -R "$source_dir/portal/composer.json" "$dir/"
+    echo "cp composer"
+    sudo cp -R "$source_dir/portal/patches/" "$dir/"
+    echo "cp patches"
+    cd "$dir/"
+    sudo chown -R devportal:nginx "$dir/composer.json" "$dir/patches/" "$dir/web/modules/" "$dir/web/content/" "$dir/web/themes/" "$dir/web/translation/" "$dir/web/sites/default/sync/"
+    sudo chmod -R 777 "$dir"
+    composer up
+    "$dir/vendor/drush/drush/drush" cim -y
+    "$dir/vendor/drush/drush/drush" cr
+    "$dir/vendor/drush/drush/drush" updb -y
+    "$dir/vendor/drush/drush/drush" locale:update -y
+    "$dir/vendor/drush/drush/drush" locale:import ar "$dir/web/translation/ar.po" --type=customized --override=all -y
+    "$dir/vendor/drush/drush/drush" cr
+}
+
+
+
 
 function php() {
 
@@ -211,159 +286,176 @@ function php() {
 
 ##################################################################################
 function installDevPortal() {
-        
+
     echo ""
-    echo "Select the Drupal Version:"
-    echo "1) Drupal 8"
-    echo "2) Drupal 9"
-    read -p "Please enter the Drupal version number: " DRUPAL_VERSION
-    sleep 5
-
-    case "$DRUPAL_VERSION" in
-        1)
-            DRUPAL_NAME="Drupal 8"
-            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-            php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-            php -r "unlink('composer-setup.php');"
-            
-            mkdir -p /var/www
-            adduser devportal
-            chown -R devportal:devportal /var/www
-
-            cd /tmp/
-            wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
-            yes|mv drush.phar /usr/local/bin/drush
-
-            PACKAGISTIP=$(dig packagist.org +short)
-            echo "$PACKAGISTIP packagist.org" >>/etc/hosts
-
-            sudo su - devportal -c 'cd /var/www && echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile && source ~/.bash_profile && composer create-project apigee/devportal-kickstart-project:8.x-dev devportal --no-interaction && cd /var/www/devportal/web/sites/default && yes |cp default.settings.php settings.php && chmod 660 settings.php'
-            cd /var/www/devportal/web/sites/default && chown -R devportal:nginx settings.php
-            cd /var/www/devportal/web
-            chown -R devportal:nginx .
-            find . -type d -exec chmod u=rwx,g=rx,o= '{}' \;
-            find . -type f -exec chmod u=rw,g=r,o= '{}' \;
-
-            cd /var/www/devportal/web/sites/default && mkdir files
-
-            chown -R devportal:nginx .
-            find . -type d -exec chmod ug=rwx,o= '{}' \;
-            find . -type f -exec chmod ug=rw,o= '{}' \;
-
-            chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default
-            chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/files 
-            chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/settings.php
-
-            mkdir /var/www/private
-            cd /var/www/private
-
-            chown -R devportal:nginx .
-            find . -type d -exec chmod ug=rwx,o= '{}' \;
-            find . -type f -exec chmod ug=rw,o= '{}' \;
-            chcon -R -t httpd_sys_content_rw_t /var/www/private
-
-            echo "\$settings['file_private_path'] = '/var/www/private';" >>/var/www/devportal/web/sites/default/settings.php
-
-            setsebool -P httpd_can_network_connect on
-            #chmod 644 /var/www/devportal/web/sites/default/settings.php
-            #chmod 755 /var/www/devportal/web/sites/default
-
+    echo "Do you need to install kickstart Drupal or Pull custom portal code from the repo ?"
+    echo "1)- kickstart Portal "
+    echo "2)- Custome portal "
+    read -p "Please enter the option: " DRUPAL_OPTION
+    case "$DRUPAL_OPTION" in
+        1)   
+            echo ""
+            echo "Select the Drupal Version:"
+            echo "1) Drupal 8"
+            echo "2) Drupal 9"
+            read -p "Please enter the Drupal version number: " DRUPAL_VERSION
+            sleep 5
+        
+            case "$DRUPAL_VERSION" in
+                1)
+                    DRUPAL_NAME="Drupal 8"
+                    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+                    php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+                    php -r "unlink('composer-setup.php');"
+                    
+                    mkdir -p /var/www
+                    adduser devportal
+                    chown -R devportal:devportal /var/www
+        
+                    cd /tmp/
+                    wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
+                    yes|mv drush.phar /usr/local/bin/drush
+        
+                    PACKAGISTIP=$(dig packagist.org +short)
+                    echo "$PACKAGISTIP packagist.org" >>/etc/hosts
+        
+                    sudo su - devportal -c 'cd /var/www && echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile && source ~/.bash_profile && composer create-project apigee/devportal-kickstart-project:8.x-dev devportal --no-interaction && cd /var/www/devportal/web/sites/default && yes |cp default.settings.php settings.php && chmod 660 settings.php'
+                    cd /var/www/devportal/web/sites/default && chown -R devportal:nginx settings.php
+                    cd /var/www/devportal/web
+                    chown -R devportal:nginx .
+                    find . -type d -exec chmod u=rwx,g=rx,o= '{}' \;
+                    find . -type f -exec chmod u=rw,g=r,o= '{}' \;
+        
+                    cd /var/www/devportal/web/sites/default && mkdir files
+        
+                    chown -R devportal:nginx .
+                    find . -type d -exec chmod ug=rwx,o= '{}' \;
+                    find . -type f -exec chmod ug=rw,o= '{}' \;
+        
+                    chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default
+                    chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/files 
+                    chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/settings.php
+        
+                    mkdir /var/www/private
+                    cd /var/www/private
+        
+                    chown -R devportal:nginx .
+                    find . -type d -exec chmod ug=rwx,o= '{}' \;
+                    find . -type f -exec chmod ug=rw,o= '{}' \;
+                    chcon -R -t httpd_sys_content_rw_t /var/www/private
+        
+                    echo "\$settings['file_private_path'] = '/var/www/private';" >>/var/www/devportal/web/sites/default/settings.php
+        
+                    setsebool -P httpd_can_network_connect on
+                    #chmod 644 /var/www/devportal/web/sites/default/settings.php
+                    #chmod 755 /var/www/devportal/web/sites/default
+        
+                    ;;
+        
+                2)
+                    DRUPAL_NAME="Drupal 9"
+                    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+                    php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+                    php -r "unlink('composer-setup.php');"
+                    
+                    mkdir -p /var/www
+                    adduser devportal
+                    chown -R devportal:devportal /var/www
+        
+                    cd /tmp/
+                    wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
+                    yes|mv drush.phar /usr/local/bin/drush
+        
+                    PACKAGISTIP=$(dig packagist.org +short)
+                    echo "$PACKAGISTIP packagist.org" >>/etc/hosts
+                    folder_path="/var/www/devportal"
+        
+                    if [ -d "$folder_path" ]; then
+                        # If the folder exists, prompt for the action
+                        read -p "Folder already exists. Do you want to (1) Delete or (2) Rename to .backup? (Enter 1 or 2): " action
+        
+                        if [ "$action" = "1" ]; then
+                            # Delete the folder if the user chooses option 1
+                            sudo rm -rf "$folder_path"
+                            echo "Folder deleted successfully."
+                        elif [ "$action" = "2" ]; then
+                            # Rename the folder to .backup if the user chooses option 2
+                            sudo mv "$folder_path" "${folder_path}.backup"
+                            echo "Folder renamed to ${folder_path}.backup"
+                        else
+                            echo "Invalid choice. No action taken."
+                        fi
+                    fi
+        
+        
+                    sudo su - devportal -c 'cd /var/www && echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile && source ~/.bash_profile && composer create-project apigee/devportal-kickstart-project:9.x-dev devportal --no-interaction && cd /var/www/devportal/web/sites/default && yes |cp default.settings.php settings.php && chmod 660 settings.php'
+                    cd /var/www/devportal/web/sites/default && chown -R devportal:nginx settings.php
+                    cd /var/www/devportal/web
+                    chown -R devportal:nginx .
+                    find . -type d -exec chmod u=rwx,g=rx,o= '{}' \;
+                    find . -type f -exec chmod u=rw,g=r,o= '{}' \;
+        
+                    cd /var/www/devportal/web/sites/default && mkdir files
+        
+                    chown -R devportal:nginx .
+                    find . -type d -exec chmod ug=rwx,o= '{}' \;
+                    find . -type f -exec chmod ug=rw,o= '{}' \;
+        
+                    chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default
+                    chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/files 
+                    chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/settings.php
+                    folder_path_2="/var/www/private"
+        
+                    if [ -d "$folder_path_2" ]; then
+                        # If the folder exists, prompt for the action
+                        read -p "Folder already exists. Do you want to (1) Delete or (2) Rename to .backup? (Enter 1 or 2): " action
+        
+                        if [ "$action" = "1" ]; then
+                            # Delete the folder if the user chooses option 1
+                            sudo rm -rf "$folder_path_2"
+                            echo "Folder deleted successfully."
+                        elif [ "$action" = "2" ]; then
+                            # Rename the folder to .backup if the user chooses option 2
+                            sudo mv "$folder_path_2" "${folder_path_2}.backup"
+                            echo "Folder renamed to ${folder_path_2}.backup"
+                        else
+                            echo "Invalid choice. No action taken."
+                        fi
+                    fi
+        
+                    mkdir /var/www/private
+                    cd /var/www/private
+        
+                    chown -R devportal:nginx .
+                    find . -type d -exec chmod ug=rwx,o= '{}' \;
+                    find . -type f -exec chmod ug=rw,o= '{}' \;
+                    chcon -R -t httpd_sys_content_rw_t /var/www/private
+        
+                    echo "\$settings['file_private_path'] = '/var/www/private';" >>/var/www/devportal/web/sites/default/settings.php
+        
+                    setsebool -P httpd_can_network_connect on
+                    #chmod 644 /var/www/devportal/web/sites/default/settings.php
+                    #chmod 755 /var/www/devportal/web/sites/default
+        
+                    ;;
+        
+        
+                *)
+                    echo "Invalid Drupal version selection."
+                    exit 1
+                    ;;
+            esac
             ;;
-
-        2)
-            DRUPAL_NAME="Drupal 9"
-            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-            php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-            php -r "unlink('composer-setup.php');"
-            
-            mkdir -p /var/www
-            adduser devportal
-            chown -R devportal:devportal /var/www
-
-            cd /tmp/
-            wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
-            yes|mv drush.phar /usr/local/bin/drush
-
-            PACKAGISTIP=$(dig packagist.org +short)
-            echo "$PACKAGISTIP packagist.org" >>/etc/hosts
-            folder_path="/var/www/devportal"
-
-            if [ -d "$folder_path" ]; then
-                # If the folder exists, prompt for the action
-                read -p "Folder already exists. Do you want to (1) Delete or (2) Rename to .backup? (Enter 1 or 2): " action
-
-                if [ "$action" = "1" ]; then
-                    # Delete the folder if the user chooses option 1
-                    sudo rm -rf "$folder_path"
-                    echo "Folder deleted successfully."
-                elif [ "$action" = "2" ]; then
-                    # Rename the folder to .backup if the user chooses option 2
-                    sudo mv "$folder_path" "${folder_path}.backup"
-                    echo "Folder renamed to ${folder_path}.backup"
-                else
-                    echo "Invalid choice. No action taken."
-                fi
-            fi
-
-
-            sudo su - devportal -c 'cd /var/www && echo "export COMPOSER_MEMORY_LIMIT=2G" >> ~devportal/.bash_profile && source ~/.bash_profile && composer create-project apigee/devportal-kickstart-project:9.x-dev devportal --no-interaction && cd /var/www/devportal/web/sites/default && yes |cp default.settings.php settings.php && chmod 660 settings.php'
-            cd /var/www/devportal/web/sites/default && chown -R devportal:nginx settings.php
-            cd /var/www/devportal/web
-            chown -R devportal:nginx .
-            find . -type d -exec chmod u=rwx,g=rx,o= '{}' \;
-            find . -type f -exec chmod u=rw,g=r,o= '{}' \;
-
-            cd /var/www/devportal/web/sites/default && mkdir files
-
-            chown -R devportal:nginx .
-            find . -type d -exec chmod ug=rwx,o= '{}' \;
-            find . -type f -exec chmod ug=rw,o= '{}' \;
-
-            chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default
-            chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/files 
-            chcon -R -t httpd_sys_content_rw_t /var/www/devportal/web/sites/default/settings.php
-            folder_path_2="/var/www/private"
-
-            if [ -d "$folder_path_2" ]; then
-                # If the folder exists, prompt for the action
-                read -p "Folder already exists. Do you want to (1) Delete or (2) Rename to .backup? (Enter 1 or 2): " action
-
-                if [ "$action" = "1" ]; then
-                    # Delete the folder if the user chooses option 1
-                    sudo rm -rf "$folder_path_2"
-                    echo "Folder deleted successfully."
-                elif [ "$action" = "2" ]; then
-                    # Rename the folder to .backup if the user chooses option 2
-                    sudo mv "$folder_path_2" "${folder_path_2}.backup"
-                    echo "Folder renamed to ${folder_path_2}.backup"
-                else
-                    echo "Invalid choice. No action taken."
-                fi
-            fi
-
-            mkdir /var/www/private
-            cd /var/www/private
-
-            chown -R devportal:nginx .
-            find . -type d -exec chmod ug=rwx,o= '{}' \;
-            find . -type f -exec chmod ug=rw,o= '{}' \;
-            chcon -R -t httpd_sys_content_rw_t /var/www/private
-
-            echo "\$settings['file_private_path'] = '/var/www/private';" >>/var/www/devportal/web/sites/default/settings.php
-
-            setsebool -P httpd_can_network_connect on
-            #chmod 644 /var/www/devportal/web/sites/default/settings.php
-            #chmod 755 /var/www/devportal/web/sites/default
-
-            ;;
-
-
-        *)
-            echo "Invalid Drupal version selection."
-            exit 1
-            ;;
-    esac
-
+    2)
+        
+        clone_repo
+        update_devportal
+        ;;
+    *)
+        echo "i dont know!"
+        ;;
+    
+ esac       
 
 
 
