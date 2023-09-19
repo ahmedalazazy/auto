@@ -45,8 +45,7 @@ emailAddress = {emailAddress}
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = {url}
-IP.1 = {ip}
+DNS.1 = {DNS}
 """
 
     # Print the configuration for debugging purposes
@@ -86,6 +85,7 @@ with open('list.csv', 'r') as csvfile:
         OU =row['OU']
         CN =row['URL']
         emailAddress =row['emailAddress']
+        DNS = row['HOSTNAME']
         # Generate SSL certificates and clean up ssl-config.conf
         generate_ssl_certificates_and_clean(env, servicename, url, ip)
 
