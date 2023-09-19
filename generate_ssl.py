@@ -57,7 +57,7 @@ DNS.1 = {DNS}
         config_file.write(ssl_config)
 
     openssl_cmd = (
-        f"openssl req -new -newkey rsa:4096 -nodes -keyout {env}/{servicename}-key.pem "
+        f"openssl req -new -newkey rsa:2048 -nodes -keyout {env}/{servicename}-key.pem "
         f"-out {env}/{servicename}-csr.csr -subj "
         f"'/C={C}/ST={ST}/L={L}/O={O}/OU={OU}/CN={url}/emailAddress={emailAddress}' "
         f"-config {config_file_name}"
@@ -86,6 +86,8 @@ with open('list.csv', 'r') as csvfile:
         CN =row['URL']
         emailAddress =row['emailAddress']
         DNS = row['HOSTNAME']
+        DNS2 = row['HOSTNAMEURL']
+
         # Generate SSL certificates and clean up ssl-config.conf
         generate_ssl_certificates_and_clean(env, servicename, url, ip)
 
