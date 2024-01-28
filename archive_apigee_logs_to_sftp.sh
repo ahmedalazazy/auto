@@ -17,9 +17,9 @@ SFTP_DEST_DIR="prod-$(hostname)-$(date +%Y-%m-%d)"
 
 # Determine SFTP_HOST based on hostname
 if [[ "$(hostname)" == k* ]]; then
-    SFTP_HOST="10.104.252.208"
+    SFTP_HOST="10.10.10.10"
 elif [[ "$(hostname)" == g* ]]; then
-    SFTP_HOST="10.114.252.208"
+    SFTP_HOST="10.10.10.12"
 else
     log "Unsupported hostname prefix. Exiting." "error"
     exit 1
