@@ -32,6 +32,7 @@ CHOSE_APIGEE_VERSION() {
       ;;
   esac
   echo "Apigee Version is : ${APIGEE_VERSION}"
+  sleep 5
 }
 
 check_netcat() {
@@ -56,7 +57,7 @@ firewall_requirements() {
     # Disable SELinux
     echo "Disabling SELinux..."
     sudo setenforce 0
-    sudo sed -i.bak 's/SELINUX=.*/SELINUX=permissive/' /etc/sysconfig/selinux
+    sudo sed -i.bak 's/SELINUX=.*/SELINUX=disable/' /etc/sysconfig/selinux
     # Disable Firewall
     systemctl stop firewalld
     systemctl disable firewalld
@@ -108,7 +109,9 @@ install_requirements() {
   echo "Disabling Postgres and NGINX..."
   sudo dnf module disable -y postgresql
   sudo dnf module disable -y nginx
-  
+  sudo dnf module disable -y php
+  sudo dnf module enalble -y php:8.0
+
   # Install Python 2 and create a symlink
   echo "Installing Python 2..."
   sudo dnf install -y python2
@@ -350,7 +353,6 @@ create_apigee_user() {
 uninstall_apigee(){
   echo "Uninstalling Apigee Edge"
   echo "1- Uninstalling Apigee Edge all components"
-
   echo "2- Uninstalling Apigee Edge  apigee-cassandra (Cassandra)"
   echo "3- Uninstalling Apigee Edge apigee-openldap (OpenLDAP)"
   echo "4- Uninstalling Apigee Edge apigee-postgresql (PostgreSQL database)"
