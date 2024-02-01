@@ -319,6 +319,7 @@ update_apigee() {
 create_apigee_organization() {
     echo "Creating Apigee Organization"
     # Add your organization creation logic here
+    /opt/apigee/apigee-service/bin/apigee-service apigee-provision install
     sleep 9
     echo "paste org configration file to onpord the org "
     echo "if you not have configration file link folow the below link"
