@@ -111,7 +111,8 @@ install_requirements() {
   sudo dnf module enable -y nginx:1.22
   sudo dnf mdoule disable -y php
   sudo dnf module enable -y php:8.0
-  sudo dnf install -y php nginx
+  sudo dnf install -y php
+  sudo dnf mdoule disable -y php
   sudo dnf module disable -y postgresql
   sudo dnf module disable -y nginx
 
