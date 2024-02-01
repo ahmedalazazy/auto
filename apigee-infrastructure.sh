@@ -171,6 +171,7 @@ install_requirements() {
   sudo bash /tmp/bootstrap_${APIGEE_VERSION}.sh apigeeuser="${UUUSSSESR}" apigeepassword="${PASSSWORDDD}"
   sudo dnf -v repolist 'apigee*'
   sudo dnf update -y
+  /opt/apigee/apigee-service/bin/apigee-service apigee-setup install
 }
 
 install_apigee() {
