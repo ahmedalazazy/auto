@@ -110,8 +110,8 @@ install_requirements() {
   sudo dnf module disable -y postgresql
   sudo dnf module disable -y nginx
   sudo dnf module disable -y php
-  sudo dnf module enalble -y php:8.0
-
+  sudo dnf module reset -y php
+  sudo dnf install -y php:8.0
   # Install Python 2 and create a symlink
   echo "Installing Python 2..."
   sudo dnf install -y python2
