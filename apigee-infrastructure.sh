@@ -107,6 +107,11 @@ install_requirements() {
     
   # Disable Postgres and NGINX
   echo "Disabling Postgres and NGINX..."
+  sudo dnf module disable -y nginx
+  sudo dnf module enable -y nginx:1.22
+  sudo dnf mdoule disable -y php
+  sudo dnf module enable -y php:8.0
+  sudo dnf install -y php nginx
   sudo dnf module disable -y postgresql
   sudo dnf module disable -y nginx
 
