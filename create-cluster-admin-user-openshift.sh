@@ -9,27 +9,27 @@ generate_password() {
     echo "$password"
 }
 
-# Prompt the user to enter the OpenShift login details
+# Prompt the user to enter the OpenShift admin username, password, and URL
 read -p "Enter the OpenShift admin username: " admin_username
 read -s -p "Enter the password for $admin_username: " admin_password
 read -p "Enter the URL for the OKD server: " okd_url
 
-# Prompt the user to enter the username
+# Prompt the user to enter the username for the new OpenShift user
 read -p "Enter the username for the new OpenShift user: " username
 
-# Generate a random password for the user
+# Generate a random password for the new user
 password=$(generate_password)
 
 # Log in to OpenShift using the provided admin credentials and URL
 oc login "$okd_url" -u "$admin_username" -p "$admin_password" --insecure-skip-tls-verify=true
 
-# Create the user in OpenShift
+# Create the new user in OpenShift using HTPasswd identity provider
+oc get secret htpass-secret -ojsonpath={.data.htpasswd} -n openshift-config | base64 -d > users.htpasswd
+cat users.htpasswd
 oc create user "$username"
-
-# Set the password for the user
-oc create secret generic "${username}-password" --from-literal=password="$password"
-
-# Assign administrative privileges to the user
-oc adm policy add-cluster-role-to-user cluster-admin "$username"
+oc create identity htpasswd:"$username"
+htpasswd -bB users.htpasswd "$username" "$password"
+oc create useridentitymapping htpasswd:"$username" "$username"
+oc create secret generic htpass-secret --from-file=htpasswd=users.htpasswd --dry-run=client -o yaml -n openshift-config | oc replace -f -
 
 echo "User '$username' created with password: $password"
